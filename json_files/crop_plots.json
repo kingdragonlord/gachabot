@@ -1,0 +1,10 @@
+[
+  {"pitch": -25, "crouched": true},
+  {"pitch": -12, "crouched": true},
+  {"pitch": -4, "crouched": true},
+  {"pitch": 4, "crouched": true},
+  {"pitch": -5.5, "crouched": false},
+  {"pitch": 1, "crouched": false},
+  {"pitch": 9, "crouched": false},
+  {"pitch": 17, "crouched": false}
+]

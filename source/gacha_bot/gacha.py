@@ -193,10 +193,11 @@ def iguanadon_gacha(metadata):
 def y_trap_harvest():
     #fast travel to next gacha 
     yaw,pitch = utils.get_yaw_pitch() # this is the beds view pitch will be 0 
+    start_yaw = float(yaw)
     time.sleep(0.2*settings.lag_offset)
     #access gacha 
     
-    utils.turn_right(180)
+    utils.set_yaw(start_yaw + 180)
     time.sleep(0.2*settings.lag_offset)
     #take all owl pellets(to refill crop plots)
     inventory.open()
@@ -204,11 +205,11 @@ def y_trap_harvest():
     inventory.close()
     time.sleep(0.2*settings.lag_offset)
     #turn back around till we are at a crop plot
-    utils.turn_right(90)
+    utils.set_yaw(start_yaw + 270)
     #harvest 3 stacks of crops 
     crop_plots.harvest_3()
     #turn back to gacha and drop all off
-    utils.turn_right(90)
+    utils.set_yaw(start_yaw) # 180 + 90 + 90 = 360 (back to start yaw)
     time.sleep(0.2*settings.lag_offset)
     inventory.open()
     player_inventory.search_in_inventory("y")
