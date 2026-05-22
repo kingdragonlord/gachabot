@@ -116,7 +116,26 @@ class task_scheduler(metaclass=SingletonMeta):
             
             if task.name != self.prev_task_name:
                 logs.logger.info(f"Executing task: {task.name}")
-            task.execute()  
+            
+            try:
+                task.execute()  
+            except Exception as e:
+                logs.logger.error(f"TASK FAILED: {task.name}. Error: {e}")
+                logs.logger.error("Attempting error recovery: teleporting back to bed and pausing.")
+                
+                from source.ASA.strucutres import teleporter
+                from source.gacha_bot import render
+                import settings
+                import time
+                try:
+                    teleporter.teleport_not_default(settings.bed_spawn)
+                    render.enter_tekpod()
+                except Exception as recovery_error:
+                    logs.logger.error(f"Failed to recover to bed: {recovery_error}")
+                
+                logs.logger.error("Bot is paused due to error. Please resolve and restart.")
+                time.sleep(999999) # Pause indefinitely
+                return
             
             self.prev_task_name = task.name
             if task.name != "pause":

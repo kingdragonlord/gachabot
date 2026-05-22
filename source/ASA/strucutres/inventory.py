@@ -33,8 +33,10 @@ def open():
             player_state.check_state()
         if attempts >= source.ASA.config.inventory_open_attempts:
             logs.logger.error(f"unable to open up the objects inventory")
-            break
+            from source.utility.exceptions import TaskFailedException
+            raise TaskFailedException("Failed to open inventory")
     time.sleep(0.3*settings.lag_offset)   
+    return True
 
 def close():
     attempts = 0
@@ -48,8 +50,10 @@ def close():
             logs.logger.error(f"unable to close the objects inventory after {attempts} attempts") 
             #check state of the char the reason we can do it now is that the latter should spam click close inv 
             player_state.check_state()
-            break
+            from source.utility.exceptions import TaskFailedException
+            raise TaskFailedException("Failed to close inventory")
     time.sleep(0.3*settings.lag_offset)    
+    return True
 #these functions assume that the inventory is already open
 def search_in_object(item:str): 
     if is_open():    
@@ -60,6 +64,9 @@ def search_in_object(item:str):
         time.sleep(0.2*settings.lag_offset)
         utils.write(item)
         time.sleep(0.1*settings.lag_offset)
+    else:
+        from source.utility.exceptions import TaskFailedException
+        raise TaskFailedException("Inventory not open when attempting to search in object")
     
 def drop_all_obj():
     if is_open():    
@@ -67,6 +74,9 @@ def drop_all_obj():
         time.sleep(0.2*settings.lag_offset)
         windows.click(variables.get_pixel_loc("drop_all_obj_x"),variables.get_pixel_loc("transfer_all_y")) 
         time.sleep(0.1*settings.lag_offset)
+    else:
+        from source.utility.exceptions import TaskFailedException
+        raise TaskFailedException("Inventory not open when attempting to drop all obj")
 
 def transfer_all_from(): 
     if is_open():
@@ -74,6 +84,9 @@ def transfer_all_from():
         time.sleep(0.2*settings.lag_offset)
         windows.click(variables.get_pixel_loc("transfer_all_from_x"), variables.get_pixel_loc("transfer_all_y"))
         time.sleep(0.1*settings.lag_offset)
+    else:
+        from source.utility.exceptions import TaskFailedException
+        raise TaskFailedException("Inventory not open when attempting to transfer all from")
 
 def popcorn_top_row():
     if is_open():
@@ -87,5 +100,8 @@ def popcorn_top_row():
                 windows.move_mouse(x,y)
             time.sleep(0.1*settings.lag_offset)
             utils.press_key("DropItem")
+    else:
+        from source.utility.exceptions import TaskFailedException
+        raise TaskFailedException("Inventory not open when attempting to popcorn top row")
 
  

@@ -10,10 +10,11 @@ import source.gacha_bot.render
 from source.gacha_bot import config , deposit , gacha , iguanadon , pego , render
 from abc import ABC ,abstractmethod
 
-global berry_station
-global last_berry
-last_berry = 0
-berry_station = True
+class StationState:
+    berry_station = True
+    last_berry = 0
+
+state = StationState()
 
 class base_task(ABC):
     def __init__(self):
@@ -42,11 +43,9 @@ class gacha_station(base_task):
 
     def execute(self):
         player_state.check_state()
-        global berry_station
-        global last_berry
         
         temp = False
-        time_between = time.time() - last_berry
+        time_between = time.time() - state.last_berry
 
         gacha_metadata = custom_stations.get_station_metadata(self.teleporter_name)
         gacha_metadata.side = self.direction
@@ -64,14 +63,14 @@ class gacha_station(base_task):
 
 
         else:
-            if (berry_station or time_between > source.gacha_bot.config.time_to_reberry*60*60): # if time is greater than 4 hours since the last time you went to berry station 
+            if (state.berry_station or time_between > source.gacha_bot.config.time_to_reberry*60*60): # if time is greater than 4 hours since the last time you went to berry station 
                 teleporter.teleport_not_default(berry_metadata)                    # or if berry station is true( when you go to tekpod and drop all ) and the time between has been longer than 30 mins since youve last been 
                 if settings.external_berry: 
                     logs.logger.debug("sleeping for 20 seconds as external")
                     time.sleep(20)#letting station spawn in if you have to tp away
                 iguanadon.berry_station()
-                last_berry = time.time()
-                berry_station = False
+                state.last_berry = time.time()
+                state.berry_station = False
                 temp = True
             
             teleporter.teleport_not_default(iguanadon_metadata) # iguanadon is a centeral tp
@@ -132,8 +131,7 @@ class render_station(base_task):
         self.name = settings.bed_spawn
         
     def execute(self):
-        global berry_station 
-        berry_station = True # setting to true as we will be away for mostlikly for a few hours
+        state.berry_station = True # setting to true as we will be away for mostlikly for a few hours
         if source.gacha_bot.render.render_flag == False:
             logs.logger.debug(f"render flag{render.render_flag} we are trying to get into the pod now")
             player_state.reset_state()

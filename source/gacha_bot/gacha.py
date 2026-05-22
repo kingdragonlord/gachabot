@@ -18,19 +18,6 @@ def drop_off(metadata): #drop off for 150 stacks of seeds
     utils.turn_right(40*turn_constant)
     time.sleep(0.2*settings.lag_offset)
     inventory.open()
-
-    attempt = 0
-    while not inventory.is_open():
-        attempt += 1
-        logs.logger.debug(f"the {direction} gacha at {metadata.name} could not be accessed retrying {attempt} / {source.gacha_bot.config.gacha_attempts}")
-        utils.zero()
-        utils.set_yaw(metadata.yaw)
-        utils.turn_right(40*turn_constant)
-        time.sleep(0.2*settings.lag_offset)
-        inventory.open()
-        if attempt >= source.gacha_bot.config.gacha_attempts:
-            logs.logger.error(f"the {direction} gacha at {metadata.name} could not be accesssed after {attempt} attempts")
-            break
     temp = False
     if inventory.is_open():
         inventory.transfer_all_from()
@@ -120,18 +107,6 @@ def collection(metadata):
     time.sleep(0.2*settings.lag_offset)
     inventory.open()
 
-    attempt = 0
-    while not inventory.is_open():
-        attempt += 1
-        logs.logger.debug(f"the {direction} gacha at {metadata.name} could not be accessed retrying {attempt} / {source.gacha_bot.config.gacha_attempts}")
-        utils.zero()
-        utils.set_yaw(metadata.side)
-        utils.turn_right(40*turn_constant)
-        time.sleep(0.2*settings.lag_offset)
-        inventory.open()
-        if attempt >= source.gacha_bot.config.gacha_attempts:
-            logs.logger.error(f"the {direction} gacha at {metadata.name} could not be accesssed after {attempt} attempts")
-
     if inventory.is_open():
         inventory.transfer_all_from()
     inventory.close()
@@ -148,19 +123,6 @@ def drop_off_nocrop(metadata): # change reberry time or you will run out of crop
     utils.turn_right(40*turn_constant)
     time.sleep(0.2*settings.lag_offset)
     inventory.open()
-
-    attempt = 0
-    while not inventory.is_open():
-        attempt += 1
-        logs.logger.debug(f"the {direction} gacha at {metadata.name} could not be accessed retrying {attempt} / {source.gacha_bot.config.gacha_attempts}")
-        utils.zero()
-        utils.set_yaw(metadata.yaw)
-        utils.turn_right(40*turn_constant)
-        time.sleep(0.2*settings.lag_offset)
-        inventory.open()
-        if attempt >= source.gacha_bot.config.gacha_attempts:
-            logs.logger.error(f"the {direction} gacha at {metadata.name} could not be accesssed after {attempt} attempts")
-            break
 
     if inventory.is_open():
         inventory.transfer_all_from()
@@ -183,14 +145,11 @@ def iguanadon_gacha(metadata):
 
     # put in mejos in current inventory into iguanadon should be 145 slots
     inventory.open()
-    if inventory.is_open():
-        time.sleep(0.1*settings.lag_offset)
-        inventory.drop_all_obj() # making sure iguanadon is empty (AT THE START ONLY - gets rid of previous seeds)
-        inventory.transfer_all_from() # doing this should prevent the seed not appearing first try
-        player_inventory.search_in_inventory(settings.berry_type) #iguanadon has 1450 weight for the 145 stacks of berries
-        player_inventory.transfer_all_inventory()
-        #check if mejoberries are in SECOND(which is the third slot) slot therfore we dont need to take out from our shoulder mount as we have more than 100 
-        # as after transfer all it resets any searched terms
+    time.sleep(0.1*settings.lag_offset)
+    inventory.drop_all_obj() # making sure iguanadon is empty (AT THE START ONLY - gets rid of previous seeds)
+    inventory.transfer_all_from() # doing this should prevent the seed not appearing first try
+    player_inventory.search_in_inventory(settings.berry_type) #iguanadon has 1450 weight for the 145 stacks of berries
+    player_inventory.transfer_all_inventory()
     inventory.close()
     # exit iguanadon press e to seed
     if not template.template_await_true(template.check_template,1,"seed_inv",0.7):
@@ -253,7 +212,11 @@ def y_trap_harvest():
     time.sleep(0.2*settings.lag_offset)
     inventory.open()
     player_inventory.search_in_inventory("y")
+    time.sleep(0.2*settings.lag_offset)
     player_inventory.transfer_all_inventory()#put all y traps inside
+    time.sleep(0.2*settings.lag_offset)
+    player_inventory.search_in_inventory("pell")
+    time.sleep(0.2*settings.lag_offset)
     player_inventory.transfer_all_inventory()#put all snow pelets inside
     inventory.close()
     time.sleep(0.2*settings.lag_offset)

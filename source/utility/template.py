@@ -42,19 +42,25 @@ roi_regions = {
     "vault_full":{"start_x":1420, "start_y":700,"width":150 ,"height":40},
     "search": {"start_x":450, "start_y":1270 ,"width":120 ,"height":40}
 }
-def template_await_true(func,sleep_amount:float,*args) -> bool:
+def template_await_true(func,sleep_amount:float,*args, raise_on_timeout=False) -> bool:
     count = 0 
     while func(*args) == False:
         if count >= sleep_amount * 20 : 
+            if raise_on_timeout:
+                from source.utility.exceptions import TaskFailedException
+                raise TaskFailedException(f"Timeout waiting for {func.__name__} to be true")
             break    
         time.sleep(0.05)
         count += 1
     return func(*args)
 
-def template_await_false(func,sleep_amount:float,*args) -> bool:
+def template_await_false(func,sleep_amount:float,*args, raise_on_timeout=False) -> bool:
     count = 0 
     while func(*args) == True:
         if count >= sleep_amount * 20 : 
+            if raise_on_timeout:
+                from source.utility.exceptions import TaskFailedException
+                raise TaskFailedException(f"Timeout waiting for {func.__name__} to be false")
             break    
         time.sleep(0.05)
         count += 1

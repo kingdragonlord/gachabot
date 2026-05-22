@@ -67,15 +67,10 @@ def vault_deposit(items, metadata):
     utils.turn_right(90*turn_constant)
     time.sleep(0.2*settings.lag_offset)
     inventory.open()
-    if not template.template_await_true(template.check_template,1,"vault",0.7):
-        logs.logger.error(f"{side} vault was not opened retrying now ")
-        inventory.close()
-        utils.zero()
-        utils.set_yaw(metadata.yaw)
-        utils.turn_right(90*turn_constant)
-        time.sleep(0.2*settings.lag_offset)
         inventory.open()
-    if template.template_await_true(template.check_template,1,"inventory",0.7):
+        if not template.template_await_true(template.check_template,1,"vault",0.7):
+            from source.utility.exceptions import TaskFailedException
+            raise TaskFailedException(f"{side} vault could not be opened after retry")
         time.sleep(0.1*settings.lag_offset)
         if template.check_template_no_bounds("vault_full",0.9):
             logs.logger.info("your vault is full skipping adding items")
@@ -112,7 +107,8 @@ def depo_grinder(metadata):
         inventory.open()
         if attempt >= source.gacha_bot.config.grinder_attempts:
             logs.logger.error(f"while trying to deposit we couldnt access grinder")
-            break
+            from source.utility.exceptions import TaskFailedException
+            raise TaskFailedException("Failed to access grinder")
 
     if template.check_template("grinder",0.7):
         player_inventory.transfer_all_inventory()
@@ -140,7 +136,8 @@ def collect_grindables(metadata):
         inventory.open()
         if attempt >= source.gacha_bot.config.grinder_attempts:
             logs.logger.error(f"while trying to deposit we couldnt access grinder")
-            break
+            from source.utility.exceptions import TaskFailedException
+            raise TaskFailedException("Failed to access grinder for collecting")
 
     if template.check_template("grinder",0.7):
         inventory.transfer_all_from()
