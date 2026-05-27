@@ -46,7 +46,7 @@ class discord_commands(commands.Cog):
             await asyncio.sleep(30)
     
     @app_commands.command(name="pause", description="sends the bot back to render bed for X amount of seconds")
-    async def reset(interaction: discord.Interaction,time:int):
+    async def reset(self, interaction: discord.Interaction, time:int):
         task = task_manager.scheduler
         pause_task = stations.pause(time)
         task.add_task(pause_task)
