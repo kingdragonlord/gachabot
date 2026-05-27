@@ -1,7 +1,7 @@
 [
     {
         "dediID": "deposit",
-        "active": false,
+        "active": true,
         "dediBoxes": [
             {
                 "resource": "element",
