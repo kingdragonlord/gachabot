@@ -1,6 +1,8 @@
 from . import screen
 
 data = {
+    "accept_drop_all_x": 1131,
+    "accept_drop_all_y": 971,
     "transfer_all_from_x": 1910,
     "transfer_all_y": 264,
     "transfer_all_inventory_x": 550,

@@ -57,6 +57,8 @@ def drop_all_inv():
         logs.logger.debug(f"dropping all items from our inventory ")
         time.sleep(0.2*settings.lag_offset)
         windows.click(variables.get_pixel_loc("drop_all_x"),variables.get_pixel_loc("transfer_all_y")) 
+        time.sleep(0.3*settings.lag_offset) # wait for the popup to appear
+        windows.click(variables.get_pixel_loc("accept_drop_all_x"),variables.get_pixel_loc("accept_drop_all_y"))
         time.sleep(0.1*settings.lag_offset)
 
 def transfer_all_inventory(): 
