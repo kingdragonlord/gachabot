@@ -67,20 +67,19 @@ def vault_deposit(items, metadata):
     utils.turn_right(90*turn_constant)
     time.sleep(0.2*settings.lag_offset)
     inventory.open()
-        inventory.open()
-        if not template.template_await_true(template.check_template,1,"vault",0.7):
-            from source.utility.exceptions import TaskFailedException
-            raise TaskFailedException(f"{side} vault could not be opened after retry")
-        time.sleep(0.1*settings.lag_offset)
-        if template.check_template_no_bounds("vault_full",0.9):
-            logs.logger.info("your vault is full skipping adding items")
-        else:
-            for x in range(len(items)):
-                player_inventory.search_in_inventory(items[x])
-                player_inventory.transfer_all_inventory()
-                time.sleep(0.3*settings.lag_offset)
-        inventory.close()
-        time.sleep(0.2*settings.lag_offset)
+    if not template.template_await_true(template.check_template,1,"vault",0.7):
+        from source.utility.exceptions import TaskFailedException
+        raise TaskFailedException(f"{side} vault could not be opened after retry")
+    time.sleep(0.1*settings.lag_offset)
+    if template.check_template_no_bounds("vault_full",0.9):
+        logs.logger.info("your vault is full skipping adding items")
+    else:
+        for x in range(len(items)):
+            player_inventory.search_in_inventory(items[x])
+            player_inventory.transfer_all_inventory()
+            time.sleep(0.3*settings.lag_offset)
+    inventory.close()
+    time.sleep(0.2*settings.lag_offset)
     utils.turn_left(90*turn_constant)
     time.sleep(0.2*settings.lag_offset)
 
