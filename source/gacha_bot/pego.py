@@ -8,21 +8,34 @@ from source.ASA.player import player_inventory , player_state
 import source.gacha_bot.config 
 
 def pego_pickup(metadata):
-    attempt = 0
+    # First, let's try the exact configured pitch in case it works
     utils.set_pitch(metadata.pitch)
     time.sleep(0.2*settings.lag_offset)
-    inventory.open()
-    while not inventory.is_open():
-        attempt += 1
-        logs.logger.debug(f"the pego at {metadata.name} could not be accessed retrying {attempt} / {source.gacha_bot.config.pego_attempts}")
-        utils.zero()
-        utils.set_yaw(metadata.yaw)
-        utils.set_pitch(metadata.pitch)
-        time.sleep(0.2*settings.lag_offset)
-        inventory.open()
-        if attempt >= source.gacha_bot.config.pego_attempts:
-            logs.logger.error(f"the pego at {metadata.name} could not be accesssed after {attempt} attempts")
-            break
+    
+    utils.press_key("AccessInventory")
+    time.sleep(0.5)
+    
+    # If not open, start sweeping
+    if not template.check_template("inventory", 0.7):
+        logs.logger.warning("Failed to open Pego at exact pitch. Starting vertical sweep search...")
+        # Reset to looking straight ahead to start the sweep
+        utils.set_pitch(0)
+        time.sleep(0.2)
+        
+        found = False
+        for sweep in range(25): # Sweep down 25 times (75 degrees total)
+            utils.turn_down(3) 
+            utils.press_key("AccessInventory")
+            time.sleep(0.4) # Wait briefly for inventory UI to appear
+            if template.check_template("inventory", 0.7):
+                logs.logger.info(f"Found Pego inventory during sweep at step {sweep}!")
+                found = True
+                break
+                
+        if not found:
+            logs.logger.error(f"the pego at {metadata.name} could not be found during sweep search")
+            from source.utility.exceptions import TaskFailedException
+            raise TaskFailedException("Failed to find Pego during vertical sweep")
 
     if inventory.is_open():# prevents pego being FLUNG
         player_inventory.drop_all_inv()
