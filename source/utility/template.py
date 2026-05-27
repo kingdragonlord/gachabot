@@ -34,7 +34,7 @@ roi_regions = {
     "player_stats": {"start_x":1120, "start_y":240 ,"width":300 ,"height":900},
     "show_buff":{"start_x":1200, "start_y":1150 ,"width":200 ,"height":50},
     "snow_owl_pellet":{"start_x":200, "start_y":150 ,"width":600 ,"height":600},
-    "orange":{"start_x":150, "start_y":180 ,"width":1 ,"height":1},
+    "orange":{"start_x":2100, "start_y":1260 ,"width":1 ,"height":1},
     "chem_bench":{"start_x":1100, "start_y":245 ,"width":355 ,"height":70},
     "indi_forge":{"start_x":1100, "start_y":245 ,"width":355 ,"height":70},
     "access_inv":{"start_x":550, "start_y":450 ,"width":1670 ,"height":880},
