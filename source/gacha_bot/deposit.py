@@ -146,7 +146,7 @@ def collect_grindables(metadata):
     time.sleep(0.2*settings.lag_offset)
     utils.turn_left(90)
     time.sleep(0.5*settings.lag_offset) # stopping hitting E on the fabricator and turing it off
-    dedi.dedi_deposit("grindables",settings.height_grind)
+    dedi.dedi_deposit("grindables",settings.height_grind, metadata.yaw)
     time.sleep(0.2*settings.lag_offset)
     if source.gacha_bot.config.linked_poly == True:
         utils.turn_left(90)
@@ -179,7 +179,7 @@ def deposit_all(metadata):
     logs.logger.debug("opening crystals")
     open_crystals()
     logs.logger.debug("depositing in ele dedi")
-    dedi.dedi_deposit("deposit",settings.height_ele)
+    dedi.dedi_deposit("deposit",settings.height_ele, metadata.yaw)
     vaults(metadata)
     if settings.height_grind != 0:
         logs.logger.debug("depositing in grinder")

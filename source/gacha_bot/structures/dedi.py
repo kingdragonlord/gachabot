@@ -102,13 +102,13 @@ def get_resource_from_dedis(resource):
     #if overcapped we dont tp again 
     
 
-def dedi_deposit(dedi_type:str,dedi_height:int):
+def dedi_deposit(dedi_type:str,dedi_height:int, base_yaw: float = 0.0):
     '''
     i guess with this you could put more dedis than the default numbers of 6 or 4 depending on if the bot can reach them 
     '''
     full_file = load_dedi_data("json_files\dedis.json")
     utils.pitch_zero()
-    utils.set_yaw(settings.station_yaw)
+    utils.set_yaw(base_yaw)
     for x in range(len(full_file)):
         if dedi_type == full_file[x]["dediID"]:
             if full_file[x]["active"] == True :
@@ -128,6 +128,6 @@ def dedi_deposit(dedi_type:str,dedi_height:int):
             else:
                 dedi_deposit_deafult(dedi_height)
     utils.set_pitch(0)            
-    utils.set_yaw(settings.station_yaw)
+    utils.set_yaw(base_yaw)
     player_state.human.reset_crouch()
     
