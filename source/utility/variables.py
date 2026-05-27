@@ -19,7 +19,7 @@ data = {
     "radical_laydown_x": 1550,
     "radical_laydown_y": 620,
     "first_bed_slot_x": 450,
-    "first_bed_slot_y": 300,
+    "first_bed_slot_y": 180,
     "close_inv_x": 2400,
     "close_inv_y": 90,
     "inv_slot_start_x": 230,
