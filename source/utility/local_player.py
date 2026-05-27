@@ -44,7 +44,8 @@ def get_input_settings(input_name):
     input_path = os.path.join(base_path, "ShooterGame", "Saved", "Config", "Windows", "input.ini")
     
     if not os.path.exists(input_path):
-        raise FileNotFoundError(f"Input settings file not found: {input_path}")
+        print(f"Warning: No input.ini found at {input_path}, defaulting to standard keybinds.")
+        return input_name
 
     with open(input_path, "r") as file:
 
