@@ -9,7 +9,7 @@ import source.gacha_bot.config
 
 def pego_pickup(metadata):
     attempt = 0
-    utils.turn_up(15)
+    utils.set_pitch(metadata.pitch)
     time.sleep(0.2*settings.lag_offset)
     inventory.open()
     while not inventory.is_open():
@@ -17,7 +17,7 @@ def pego_pickup(metadata):
         logs.logger.debug(f"the pego at {metadata.name} could not be accessed retrying {attempt} / {source.gacha_bot.config.pego_attempts}")
         utils.zero()
         utils.set_yaw(metadata.yaw)
-        utils.turn_up(15)
+        utils.set_pitch(metadata.pitch)
         time.sleep(0.2*settings.lag_offset)
         inventory.open()
         if attempt >= source.gacha_bot.config.pego_attempts:

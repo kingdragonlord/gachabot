@@ -42,7 +42,7 @@ def get_station_metadata(teleporter_name:str):
                 stationdata.ypos = entry_station["ypos"]
                 stationdata.zpos = entry_station["zpos"]
                 stationdata.yaw  = entry_station["yaw"]
-                #stationdata.pitch = entry_station["pitch"]
+                stationdata.pitch = entry_station.get("pitch", 0)
                 foundstation = True
                 break
 
