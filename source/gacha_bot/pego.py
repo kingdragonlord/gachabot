@@ -13,10 +13,9 @@ def pego_pickup(metadata):
     time.sleep(0.2*settings.lag_offset)
     
     utils.press_key("AccessInventory")
-    time.sleep(0.5)
     
     # If not open, start sweeping
-    if not template.check_template("inventory", 0.7):
+    if not template.template_await_true(template.check_template, 2.0, "inventory", 0.7):
         logs.logger.warning("Failed to open Pego at exact pitch. Starting vertical sweep search...")
         # Reset to looking straight ahead to start the sweep
         utils.set_pitch(0)
@@ -26,8 +25,9 @@ def pego_pickup(metadata):
         for sweep in range(25): # Sweep down 25 times (75 degrees total)
             utils.turn_down(3) 
             utils.press_key("AccessInventory")
-            time.sleep(0.4) # Wait briefly for inventory UI to appear
-            if template.check_template("inventory", 0.7):
+            
+            # Wait up to 2 seconds for the inventory to open before trying the next sweep
+            if template.template_await_true(template.check_template, 2.0, "inventory", 0.7):
                 logs.logger.info(f"Found Pego inventory during sweep at step {sweep}!")
                 found = True
                 break
