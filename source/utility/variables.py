@@ -1,7 +1,7 @@
 from . import screen
 
 data = {
-    "transfer_all_from_x": 1865,
+    "transfer_all_from_x": 1910,
     "transfer_all_y": 264,
     "transfer_all_inventory_x": 550,
     "drop_all_x": 610,
