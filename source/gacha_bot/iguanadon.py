@@ -66,6 +66,12 @@ def seed(type):
 def iguanadon_open(metadata):
     attempt = 0
     time.sleep(0.2*settings.lag_offset)
+    
+    # Must aim at Iguanodon BEFORE opening!
+    utils.zero()
+    utils.set_yaw(metadata.yaw)
+    time.sleep(0.2*settings.lag_offset)
+    
     inventory.open()
     while not inventory.is_open():
         attempt += 1

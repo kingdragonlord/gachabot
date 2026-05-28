@@ -203,19 +203,13 @@ def turn_up(degrees):
 def turn_to(yaw,pitch):
     global current_yaw
     global current_pitch
-    inital_pitch = current_pitch
     inital_yaw = current_yaw
 
-    diff_pitch = inital_pitch 
     diff_yaw = ((yaw - inital_yaw) + 180) % 360 - 180
     if diff_yaw < 0:
         turn_left(-diff_yaw)
     else:
         turn_right(diff_yaw)
     current_yaw = yaw
-    diff_pitch = inital_pitch - pitch
-    if diff_pitch > 0:
-        turn_up(-diff_pitch)
-    else:
-        turn_down(diff_pitch)
-    current_pitch = pitch
+    
+    set_pitch(pitch)

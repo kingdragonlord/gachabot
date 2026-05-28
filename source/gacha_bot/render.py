@@ -24,29 +24,29 @@ def enter_tekpod():
             player_inventory.implant_eat()
             player_state.check_state() # this should respawn our char in the bed
         time.sleep(0.5*settings.lag_offset)    
-        utils.press_key(local_player.get_input_settings("Run")) #uncrouching char just in case
+        utils.press_key("Run") #uncrouching char just in case
         utils.zero()
         utils.set_yaw(settings.station_yaw)
         utils.turn_down(15)
         time.sleep(0.3*settings.lag_offset)
-        pyautogui.keyDown(chr(utils.keymap_return(local_player.get_input_settings("Use"))))
+        utils.key_down("Use")
         
         if not template.template_await_true(template.check_template_no_bounds,1,"bed_radical",0.6):
-            pyautogui.keyUp(chr(utils.keymap_return(local_player.get_input_settings("Use"))))
+            utils.key_up("Use")
             time.sleep(0.5*settings.lag_offset)    
-            utils.press_key(local_player.get_input_settings("Run")) 
+            utils.press_key("Run") 
             utils.zero()
             utils.set_yaw(settings.station_yaw)
             utils.turn_down(15)
             time.sleep(0.3*settings.lag_offset)
-            pyautogui.keyDown(chr(utils.keymap_return(local_player.get_input_settings("Use"))))
+            utils.key_down("Use")
             time.sleep(0.5*settings.lag_offset)
 
         if template.template_await_true(template.check_template_no_bounds,1,"bed_radical",0.6):
             time.sleep(0.2*settings.lag_offset)
             windows.move_mouse(variables.get_pixel_loc("radical_laydown_x"), variables.get_pixel_loc("radical_laydown_y"))
             time.sleep(0.5*settings.lag_offset)
-            pyautogui.keyUp(chr(utils.keymap_return(local_player.get_input_settings("Use"))))
+            utils.key_up("Use")
             time.sleep(1)
         buff = buffs.check_buffs()
         if buff.check_buffs() == 1:
