@@ -56,8 +56,8 @@ class gacha_station(base_task):
                 gachas = json.load(f)
             for g in gachas:
                 if g["name"] == self.name:
-                    gacha_metadata.yaw = g.get("yaw", None)
-                    gacha_metadata.pitch = g.get("pitch", None)
+                    gacha_metadata.target_yaw = g.get("yaw", None)
+                    gacha_metadata.target_pitch = g.get("pitch", None)
                     break
         except Exception as e:
             logs.logger.debug(f"Failed to load gacha.json absolute coordinates: {e}")
@@ -171,11 +171,23 @@ class snail_pheonix(base_task):
         gacha_metadata = custom_stations.get_station_metadata(self.teleporter_name)
         gacha_metadata.side = self.direction
 
+        # Load absolute yaw and pitch from gacha.json
+        try:
+            with open("json_files/gacha.json", "r") as f:
+                gachas = json.load(f)
+            for g in gachas:
+                if g["name"] == self.name:
+                    gacha_metadata.target_yaw = g.get("yaw", None)
+                    gacha_metadata.target_pitch = g.get("pitch", None)
+                    break
+        except Exception as e:
+            logs.logger.debug(f"Failed to load gacha.json absolute coordinates: {e}")
+
         player_state.check_state()
         teleporter.teleport_not_default(gacha_metadata)
         gacha.collection(gacha_metadata)
         teleporter.teleport_not_default(self.depo_tp)
-        deposit.dedi_deposit(settings.height_ele)
+        deposit.dedi_deposit("element", settings.height_ele, gacha_metadata.yaw)
         
     def get_priority_level(self):
         return 4

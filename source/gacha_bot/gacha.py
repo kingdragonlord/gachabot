@@ -97,8 +97,8 @@ def drop_off(metadata): #drop off for 150 stacks of seeds
     utils.turn_left(40*turn_constant)
 
 def collection(metadata):
-    target_yaw = getattr(metadata, "yaw", None)
-    target_pitch = getattr(metadata, "pitch", None)
+    target_yaw = getattr(metadata, "target_yaw", None)
+    target_pitch = getattr(metadata, "target_pitch", None)
     
     if target_yaw is not None and target_pitch is not None:
         utils.turn_to(target_yaw, target_pitch)
@@ -120,8 +120,8 @@ def collection(metadata):
 
 
 def drop_off_nocrop(metadata): # change reberry time or you will run out of crops
-    target_yaw = getattr(metadata, "yaw", None)
-    target_pitch = getattr(metadata, "pitch", None)
+    target_yaw = getattr(metadata, "target_yaw", None)
+    target_pitch = getattr(metadata, "target_pitch", None)
     
     if target_yaw is not None and target_pitch is not None:
         utils.turn_to(target_yaw, target_pitch)
@@ -146,8 +146,8 @@ def drop_off_nocrop(metadata): # change reberry time or you will run out of crop
 
 
 def iguanadon_gacha(metadata):
-    target_yaw = getattr(metadata, "yaw", None)
-    target_pitch = getattr(metadata, "pitch", None)
+    target_yaw = getattr(metadata, "target_yaw", None)
+    target_pitch = getattr(metadata, "target_pitch", None)
     
     if target_yaw is not None and target_pitch is not None:
         # Turning backwards to face the iguanadon from the gacha
