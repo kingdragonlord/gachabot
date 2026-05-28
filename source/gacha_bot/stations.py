@@ -49,6 +49,18 @@ class gacha_station(base_task):
 
         gacha_metadata = custom_stations.get_station_metadata(self.teleporter_name)
         gacha_metadata.side = self.direction
+        
+        # Load absolute yaw and pitch from gacha.json
+        try:
+            with open("json_files/gacha.json", "r") as f:
+                gachas = json.load(f)
+            for g in gachas:
+                if g["name"] == self.name:
+                    gacha_metadata.yaw = g.get("yaw", None)
+                    gacha_metadata.pitch = g.get("pitch", None)
+                    break
+        except Exception as e:
+            logs.logger.debug(f"Failed to load gacha.json absolute coordinates: {e}")
 
         berry_metadata = custom_stations.get_station_metadata(settings.berry_station)
         iguanadon_metadata = custom_stations.get_station_metadata(settings.iguanadon)

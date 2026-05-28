@@ -97,30 +97,43 @@ def drop_off(metadata): #drop off for 150 stacks of seeds
     utils.turn_left(40*turn_constant)
 
 def collection(metadata):
-    direction = metadata.side
-    if direction == "right":
-        turn_constant = 1
+    target_yaw = getattr(metadata, "yaw", None)
+    target_pitch = getattr(metadata, "pitch", None)
+    
+    if target_yaw is not None and target_pitch is not None:
+        utils.turn_to(target_yaw, target_pitch)
     else:
-        turn_constant = -1
-
-    utils.turn_right(40*turn_constant)
+        # Fallback to legacy blind turning
+        direction = metadata.side
+        if direction == "right":
+            turn_constant = 1
+        else:
+            turn_constant = -1
+        utils.turn_right(40*turn_constant)
+        
     time.sleep(0.2*settings.lag_offset)
     inventory.open()
 
     if inventory.is_open():
         inventory.transfer_all_from()
     inventory.close()
-    utils.turn_left(40*turn_constant)
 
 
 def drop_off_nocrop(metadata): # change reberry time or you will run out of crops
-    direction = metadata.side
-    if direction == "right":
-        turn_constant = 1
+    target_yaw = getattr(metadata, "yaw", None)
+    target_pitch = getattr(metadata, "pitch", None)
+    
+    if target_yaw is not None and target_pitch is not None:
+        utils.turn_to(target_yaw, target_pitch)
     else:
-        turn_constant = -1
-
-    utils.turn_right(40*turn_constant)
+        # Fallback to legacy blind turning
+        direction = metadata.side
+        if direction == "right":
+            turn_constant = 1
+        else:
+            turn_constant = -1
+        utils.turn_right(40*turn_constant)
+        
     time.sleep(0.2*settings.lag_offset)
     inventory.open()
 
@@ -130,17 +143,27 @@ def drop_off_nocrop(metadata): # change reberry time or you will run out of crop
         player_inventory.transfer_all_inventory()
     inventory.close()
     time.sleep(0.2*settings.lag_offset)
-    utils.turn_left(40*turn_constant)
 
 
 def iguanadon_gacha(metadata):
-    direction = metadata.side
-    if direction == "right":
-        turn_constant = 1
+    target_yaw = getattr(metadata, "yaw", None)
+    target_pitch = getattr(metadata, "pitch", None)
+    
+    if target_yaw is not None and target_pitch is not None:
+        # Turning backwards to face the iguanadon from the gacha
+        # Wait, if we use absolute aiming, does this function aim at the Gacha or the Iguanodon?
+        # The original code did turn_right(180) to face the iguanadon.
+        utils.turn_to((target_yaw + 180) % 360, target_pitch)
     else:
-        turn_constant = -1
+        # Fallback to legacy blind turning
+        direction = metadata.side
+        if direction == "right":
+            turn_constant = 1
+        else:
+            turn_constant = -1
 
-    utils.turn_right(180) # turning backwards to face iguaadon
+        utils.turn_right(180) # turning backwards to face iguaadon
+        
     time.sleep(0.2*settings.lag_offset) # timer to prevent accidentle openings of the gachas 
 
     # put in mejos in current inventory into iguanadon should be 145 slots

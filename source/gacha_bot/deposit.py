@@ -59,17 +59,25 @@ def dedi_deposit(height):
     time.sleep(0.1*settings.lag_offset)
 
 def vault_deposit(items, metadata):
-    side = metadata.side
-    if side == "right":
-        turn_constant = 1
+    target_yaw = getattr(metadata, "yaw", None)
+    target_pitch = getattr(metadata, "pitch", None)
+    
+    if target_yaw is not None and target_pitch is not None:
+        utils.turn_to(target_yaw, target_pitch)
     else:
-        turn_constant = -1
-    utils.turn_right(90*turn_constant)
+        # Fallback to legacy blind turning
+        side = getattr(metadata, "side", "left")
+        if side == "right":
+            turn_constant = 1
+        else:
+            turn_constant = -1
+        utils.turn_right(90*turn_constant)
+        
     time.sleep(0.2*settings.lag_offset)
     inventory.open()
     if not template.template_await_true(template.check_template,1,"vault",0.7):
         from source.utility.exceptions import TaskFailedException
-        raise TaskFailedException(f"{side} vault could not be opened after retry")
+        raise TaskFailedException(f"vault could not be opened after retry")
     time.sleep(0.1*settings.lag_offset)
     if template.check_template_no_bounds("vault_full",0.9):
         logs.logger.info("your vault is full skipping adding items")
@@ -79,8 +87,6 @@ def vault_deposit(items, metadata):
             player_inventory.transfer_all_inventory()
             time.sleep(0.3*settings.lag_offset)
     inventory.close()
-    time.sleep(0.2*settings.lag_offset)
-    utils.turn_left(90*turn_constant)
     time.sleep(0.2*settings.lag_offset)
 
 def drop_useless():
@@ -170,6 +176,8 @@ def vaults(metadata):
         side = entry_vaults["side"]
         items = entry_vaults["items"]
         metadata.side = side
+        metadata.yaw = entry_vaults.get("yaw", None)
+        metadata.pitch = entry_vaults.get("pitch", None)
         logs.logger.debug(f"openening up {name} on the {side} side to depo{items}")
         vault_deposit(items,metadata)
 

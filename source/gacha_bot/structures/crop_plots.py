@@ -17,10 +17,10 @@ def harvest_crop():
     player_inventory.transfer_all_inventory() #transfer all the snow pellets into the crop plot
     inventory.close()
 
-def harvest_stack():
+def harvest_all():
     try:
         with open("json_files/crop_plots.json", "r") as f:
-            pitches = json.load(f)
+            plots = json.load(f)
     except Exception as e:
         logs.logger.error(f"Failed to load crop_plots.json: {e}")
         from source.utility.exceptions import TaskFailedException
@@ -28,8 +28,9 @@ def harvest_stack():
 
     current_crouch = False
     
-    for plot in pitches:
+    for plot in plots:
         target_pitch = plot.get("pitch", 0)
+        target_yaw = plot.get("yaw", None)
         should_crouch = plot.get("crouched", False)
         
         if should_crouch and not current_crouch:
@@ -39,7 +40,11 @@ def harvest_stack():
             player_state.human.reset_crouch()
             current_crouch = False
             
-        utils.set_pitch(target_pitch)
+        if target_yaw is not None:
+            utils.turn_to(target_yaw, target_pitch)
+        else:
+            utils.set_pitch(target_pitch)
+            
         time.sleep(0.2*settings.lag_offset)
         harvest_crop()
         time.sleep(0.3*settings.lag_offset)
@@ -50,10 +55,8 @@ def harvest_stack():
     utils.set_pitch(0)
 
 def harvest_3():
-    #looking at the left most stack to begin with 
-    harvest_stack()
-    utils.turn_right(90)
-    harvest_stack()
-    utils.turn_right(90)
-    harvest_stack()
+    # Looks like original code harvested 3 stacks.
+    # Now that we use absolute aiming with harvest_all(), 
+    # we can just call harvest_all() which iterates through the entire JSON array.
+    harvest_all()
 
