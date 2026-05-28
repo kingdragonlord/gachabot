@@ -14,7 +14,7 @@ render_flag = False #starts as false as obviously we are not rendering anything
 def is_open():
     return template.check_template_no_bounds("bed_radical",0.6)
 
-def enter_tekpod():
+def enter_tekpod(metadata=None):
     global render_flag
     attempts = 0 
     while not render_flag:
@@ -25,9 +25,14 @@ def enter_tekpod():
             player_state.check_state() # this should respawn our char in the bed
         time.sleep(0.5*settings.lag_offset)    
         utils.press_key("Run") #uncrouching char just in case
-        utils.zero()
-        utils.set_yaw(settings.station_yaw)
-        utils.turn_down(15)
+        
+        if metadata and getattr(metadata, "yaw", None) is not None:
+            utils.turn_to(metadata.yaw, metadata.pitch)
+        else:
+            utils.zero()
+            utils.set_yaw(settings.station_yaw)
+            utils.turn_down(15)
+            
         time.sleep(0.3*settings.lag_offset)
         utils.key_down("Use")
         
@@ -35,9 +40,14 @@ def enter_tekpod():
             utils.key_up("Use")
             time.sleep(0.5*settings.lag_offset)    
             utils.press_key("Run") 
-            utils.zero()
-            utils.set_yaw(settings.station_yaw)
-            utils.turn_down(15)
+            
+            if metadata and getattr(metadata, "yaw", None) is not None:
+                utils.turn_to(metadata.yaw, metadata.pitch)
+            else:
+                utils.zero()
+                utils.set_yaw(settings.station_yaw)
+                utils.turn_down(15)
+                
             time.sleep(0.3*settings.lag_offset)
             utils.key_down("Use")
             time.sleep(0.5*settings.lag_offset)
