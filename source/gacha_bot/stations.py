@@ -1,4 +1,5 @@
-import time 
+import time
+import json
 import settings
 from source.utility import utils ,template , windows ,variables ,screen ,local_player
 from source.logs import gachalogs as logs
