@@ -66,9 +66,9 @@ def transfer_all_inventory():
         logs.logger.debug(f"transfering all from our inventory into strucutre")
         time.sleep(0.2*settings.lag_offset)
         windows.click(variables.get_pixel_loc("transfer_all_inventory_x"),variables.get_pixel_loc("transfer_all_y"))
-        time.sleep(0.3*settings.lag_offset) # wait for the popup to appear
+        time.sleep(0.7*settings.lag_offset) # wait for the popup to appear
         windows.click(variables.get_pixel_loc("accept_drop_all_x"),variables.get_pixel_loc("accept_drop_all_y"))
-        time.sleep(0.1*settings.lag_offset)
+        time.sleep(0.2*settings.lag_offset)
 
 
 
