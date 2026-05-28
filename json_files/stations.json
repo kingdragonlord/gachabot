@@ -1,12 +1,26 @@
 [
     {
-        "name": "ADD TELEPORTER NAME",
+        "name": "pego1",
         "xpos": -1,
         "ypos": -1,
         "zpos": -1,
-        "yaw": 0,
+        "yaw": -80,
         "pitch": 0
+    },
+    {
+        "name": "GACHAPAIR1",
+        "xpos": 0,
+        "ypos": 0,
+        "zpos": 0,
+        "yaw": 160.27,
+        "pitch": 0
+    },
+    {
+        "name": "GACHARENDER",
+        "xpos": 816218,
+        "ypos": 820634,
+        "zpos": -3194,
+        "yaw": 161.03,
+        "pitch": 0.00
     }
-    
-    
 ]

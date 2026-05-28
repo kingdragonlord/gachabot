@@ -188,10 +188,15 @@ def deposit_all(metadata):
     open_crystals()
     logs.logger.debug("depositing in ele dedi")
     dedi.dedi_deposit("deposit",settings.height_ele, metadata.yaw)
-    vaults(metadata)
+    
+    # Teleport to the vaults
+    vault_metadata = custom_stations.get_station_metadata("dropoff")
+    teleporter.teleport_not_default(vault_metadata)
+    
+    vaults(vault_metadata)
     if settings.height_grind != 0:
         logs.logger.debug("depositing in grinder")
-        depo_grinder(metadata)
+        depo_grinder(vault_metadata)
         grindables_metadata = custom_stations.get_station_metadata(settings.grindables)
         teleporter.teleport_not_default(grindables_metadata)
         logs.logger.debug("collecting grindables")
