@@ -53,6 +53,14 @@ def press_key(input_action):
     time.sleep(0.05)
     ctypes.windll.user32.PostMessageW(hwnd, WM_KEYUP , vk_code, 0)
 
+def key_down(input_action):
+    vk_code = keymap_return(local_player.get_input_settings(input_action))
+    ctypes.windll.user32.PostMessageW(hwnd, WM_KEYDOWN , vk_code, 0)
+
+def key_up(input_action):
+    vk_code = keymap_return(local_player.get_input_settings(input_action))
+    ctypes.windll.user32.PostMessageW(hwnd, WM_KEYUP , vk_code, 0)
+
 def post_charecter(char):
     ctypes.windll.user32.PostMessageW(hwnd, WM_CHAR, ord(char), 0)
 
@@ -86,11 +94,14 @@ def normalize_yaw(yaw):
 
 def set_yaw(yaw):
     global current_yaw    
+    global current_pitch
     try:
-        logs.logger.debug(f"setting yaw as {float(console.console_ccc()[3])}")
-        current_yaw = float(console.console_ccc()[3])
+        ccc_data = console.console_ccc()
+        logs.logger.debug(f"setting yaw as {float(ccc_data[3])} and pitch as {float(ccc_data[4])}")
+        current_yaw = float(ccc_data[3])
+        current_pitch = float(ccc_data[4])
     except Exception as e:
-        logs.logger.error(f"error processing ccc_data[3]: {e}")
+        logs.logger.error(f"error processing ccc_data: {e}")
 
     try:# had an issue where this was a string for some reason
         target = float(yaw)    

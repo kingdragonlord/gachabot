@@ -43,8 +43,18 @@ def seed(type):
         player_inventory.transfer_all_inventory()
         inventory.close()
         template.template_await_true(template.check_template,1,"seed_inv",0.7)
-    utils.press_key("Use")
-    time.sleep(2*settings.lag_offset)
+    
+    # Use Radial Wheel to Seed Berries
+    logs.logger.debug("Opening radial wheel to seed berries")
+    utils.key_down("Use")
+    time.sleep(1.0 * settings.lag_offset) # Wait for radial wheel to open
+    # Move mouse to Top Right (relative to center)
+    center_x = screen.mon["width"] / 2
+    center_y = screen.mon["height"] / 2
+    windows.move_mouse(center_x + (300 * (screen.mon["width"] / 2560)), center_y - (300 * (screen.mon["height"] / 1440)))
+    time.sleep(0.5 * settings.lag_offset)
+    utils.key_up("Use")
+    time.sleep(2 * settings.lag_offset)
     inventory.open()
     if inventory.is_open():
         inventory.search_in_object("seed")
