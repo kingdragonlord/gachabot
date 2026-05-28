@@ -74,11 +74,17 @@ def get_info_on_dedi(dedi_id,position):
     full_file = load_dedi_data("json_files\dedis.json")
     for x in range(len(full_file)):
         if dedi_id == full_file[x]["dediID"]:
-            #print(full_file[x]["dediBoxes"][position])
             dedi_info = full_file[x]["dediBoxes"][position]
-            yaw = dedi_info["location"]["yaw"]
-            pitch = dedi_info["location"]["pitch"]
-            crouched = dedi_info["crouched"]
+            
+            # Support both new flattened format and legacy nested format
+            if "location" in dedi_info:
+                yaw = dedi_info["location"].get("yaw", 0)
+                pitch = dedi_info["location"].get("pitch", 0)
+            else:
+                yaw = dedi_info.get("yaw", 0)
+                pitch = dedi_info.get("pitch", 0)
+                
+            crouched = dedi_info.get("crouched", False)
             return yaw , pitch, crouched
 
 def get_resource_from_dedis(resource):
