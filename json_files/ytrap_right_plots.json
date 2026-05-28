@@ -1,0 +1,42 @@
+[
+    {
+        "yaw": -50.78,
+        "pitch": 22.09,
+        "crouched": false
+    },
+    {
+        "yaw": -51.28,
+        "pitch": 7.13,
+        "crouched": false
+    },
+    {
+        "yaw": -49.79,
+        "pitch": -10.75,
+        "crouched": false
+    },
+    {
+        "yaw": -50.68,
+        "pitch": -23.63,
+        "crouched": false
+    },
+    {
+        "yaw": -53.15,
+        "pitch": -35.99,
+        "crouched": false
+    },
+    {
+        "yaw": -52.53,
+        "pitch": -18.92,
+        "crouched": true
+    },
+    {
+        "yaw": -52.00,
+        "pitch": -29.66,
+        "crouched": true
+    },
+    {
+        "yaw": -47.95,
+        "pitch": -41.98,
+        "crouched": true
+    }
+]

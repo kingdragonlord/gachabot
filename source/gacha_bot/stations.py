@@ -66,14 +66,20 @@ class gacha_station(base_task):
         berry_metadata = custom_stations.get_station_metadata(settings.berry_station)
         iguanadon_metadata = custom_stations.get_station_metadata(settings.iguanadon)
         if settings.y_trap_bot:
-            #check if we are on a teleporter or bed
-            #if on a bed fast travel 
-            #else we need to go to render and fast travel
             time.sleep(0.2)
-            bed.fast_travel(self.teleporter_name)
-            gacha.y_trap_harvest()
+            # Teleport to the y-trap teleporter
+            ytrap_metadata = custom_stations.get_station_metadata("ytrap1")
+            teleporter.teleport_not_default(ytrap_metadata)
             
-
+            # Harvest the respective stack (left or right)
+            import source.gacha_bot.structures.crop_plots as crop_plots
+            crop_plots.harvest_stack(self.direction)
+            
+            # Teleport back to the gacha
+            teleporter.teleport_not_default(gacha_metadata)
+            
+            # Drop off the y-traps
+            gacha.y_trap_drop_off(gacha_metadata)
 
         else:
             if (state.berry_station or time_between > source.gacha_bot.config.time_to_reberry*60*60): # if time is greater than 4 hours since the last time you went to berry station 

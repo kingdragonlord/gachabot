@@ -17,14 +17,15 @@ def harvest_crop():
     player_inventory.transfer_all_inventory() #transfer all the snow pellets into the crop plot
     inventory.close()
 
-def harvest_all():
+def harvest_stack(side):
+    file_name = f"json_files/ytrap_{side}_plots.json"
     try:
-        with open("json_files/crop_plots.json", "r") as f:
+        with open(file_name, "r") as f:
             plots = json.load(f)
     except Exception as e:
-        logs.logger.error(f"Failed to load crop_plots.json: {e}")
+        logs.logger.error(f"Failed to load {file_name}: {e}")
         from source.utility.exceptions import TaskFailedException
-        raise TaskFailedException("Missing or invalid crop_plots.json")
+        raise TaskFailedException(f"Missing or invalid {file_name}")
 
     current_crouch = False
     
@@ -53,10 +54,4 @@ def harvest_all():
     if current_crouch:
         player_state.human.reset_crouch()
     utils.set_pitch(0)
-
-def harvest_3():
-    # Looks like original code harvested 3 stacks.
-    # Now that we use absolute aiming with harvest_all(), 
-    # we can just call harvest_all() which iterates through the entire JSON array.
-    harvest_all()
 
