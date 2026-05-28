@@ -67,8 +67,18 @@ class gacha_station(base_task):
         iguanadon_metadata = custom_stations.get_station_metadata(settings.iguanadon)
         if settings.y_trap_bot:
             time.sleep(0.2)
+            # Extract number from teleporter name to map to the correct ytrap station
+            import re
+            match = re.search(r'\d+', self.teleporter_name)
+            if match:
+                ytrap_num = match.group()
+                # Use standard prefix mapping, defaulting back if the user somehow uses old names
+                ytrap_name = f"GachaBot_ytrap{ytrap_num}"
+            else:
+                ytrap_name = "ytrap1"
+
             # Teleport to the y-trap teleporter
-            ytrap_metadata = custom_stations.get_station_metadata("ytrap1")
+            ytrap_metadata = custom_stations.get_station_metadata(ytrap_name)
             teleporter.teleport_not_default(ytrap_metadata)
             
             # Harvest the respective stack (left or right)

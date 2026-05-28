@@ -200,7 +200,7 @@ def deposit_all(metadata):
     dedi.dedi_deposit("deposit",settings.height_ele, metadata.yaw)
     
     # Teleport to the vaults
-    vault_metadata = custom_stations.get_station_metadata("dropoff")
+    vault_metadata = custom_stations.get_station_metadata("GachaBot_vault01")
     teleporter.teleport_not_default(vault_metadata)
     
     vaults(vault_metadata)
