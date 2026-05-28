@@ -126,7 +126,17 @@ def depo_grinder(metadata):
     utils.turn_right(180)
 
 def collect_grindables(metadata):
-    utils.turn_right(90)
+    grinder_yaw = -89.79
+    grinder_pitch = -17.18
+    try:
+        with open("json_files/grinder.json", "r") as f:
+            g_data = json.load(f)
+            grinder_yaw = g_data.get("collect_yaw", grinder_yaw)
+            grinder_pitch = g_data.get("collect_pitch", grinder_pitch)
+    except Exception as e:
+        logs.logger.debug(f"Could not load grinder.json: {e}")
+
+    utils.turn_to(grinder_yaw, grinder_pitch)
     time.sleep(0.3*settings.lag_offset) # sleep stops the grinder from opening the dedis on accident 
     inventory.open()
     attempt = 0
@@ -136,7 +146,7 @@ def collect_grindables(metadata):
         inventory.close()
         utils.zero()
         utils.set_yaw(metadata.yaw)
-        utils.turn_right(90)
+        utils.turn_to(grinder_yaw, grinder_pitch)
         time.sleep(0.5*settings.lag_offset)
         inventory.open()
         if attempt >= source.gacha_bot.config.grinder_attempts:
