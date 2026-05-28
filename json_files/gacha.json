@@ -4,15 +4,15 @@
         "teleporter": "GACHAPAIR1",
         "resource_type": "element",
         "side": "left",
-        "yaw": 157.65,
-        "pitch": 1.05
+        "yaw": 151.54,
+        "pitch": 4.78
     },
     {
         "name": "gacha2",
         "teleporter": "GACHAPAIR1",
         "resource_type": "element",
         "side": "right",
-        "yaw": -102.67,
-        "pitch": 15.08
+        "yaw": -109.99,
+        "pitch": 7.00
     }
 ]
