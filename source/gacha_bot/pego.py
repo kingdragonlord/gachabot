@@ -8,8 +8,27 @@ from source.ASA.player import player_inventory , player_state
 import source.gacha_bot.config 
 
 def pego_pickup(metadata):
-    # First, let's try the exact configured pitch in case it works
-    utils.set_pitch(metadata.pitch)
+    # Load absolute coordinates from pego.json if available
+    target_yaw = None
+    target_pitch = metadata.pitch
+    try:
+        import json
+        with open("json_files/pego.json", "r") as f:
+            p_data = json.load(f)
+            for p in p_data:
+                if p["name"] == metadata.name:
+                    target_yaw = p.get("yaw", None)
+                    target_pitch = p.get("pitch", metadata.pitch)
+                    break
+    except Exception as e:
+        logs.logger.debug(f"Could not load pego.json: {e}")
+
+    # First, let's try the exact configured pitch/yaw in case it works
+    if target_yaw is not None and target_pitch is not None:
+        utils.turn_to(target_yaw, target_pitch)
+    else:
+        utils.set_pitch(target_pitch)
+        
     time.sleep(0.2*settings.lag_offset)
     
     utils.press_key("AccessInventory")
