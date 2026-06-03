@@ -60,8 +60,21 @@ def main():
     for single_tp in [render_tp, vault_tp, dedi_tp, grindables_tp]:
         if not any(s.get("name") == single_tp for s in stations):
             print(f"Adding {single_tp} to stations.json... (Defaulting to Search Bar -1)")
-            stations.append({"name": single_tp, "xpos": -1, "ypos": -1, "zpos": -1, "yaw": 0, "pitch": 0})
+            stations.append({"name": single_tp, "xpos": -1, "ypos": -1, "zpos": -1, "yaw": 0.0, "pitch": 0.0})
     save_json(stations_file, stations)
+
+    # -----------------------------------------------------
+    # TEK BED (RENDER STATION)
+    # -----------------------------------------------------
+    ans = input(f"\nDo you want to calibrate the Tek Bed location for {render_tp}? (y/n): ").strip().lower()
+    if ans.startswith('y'):
+        yaw, pitch = get_coordinates(f"Teleport to {render_tp}. Aim exactly at the Tek Bed.")
+        for s in stations:
+            if s["name"] == render_tp:
+                s["yaw"] = yaw
+                s["pitch"] = pitch
+                break
+        save_json(stations_file, stations)
 
     # -----------------------------------------------------
     # VAULTS
