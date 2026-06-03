@@ -1,12 +1,7 @@
-import json
-import time
 import os
-import sys
-
-# Add project root to sys.path so we can import source modules
-sys.path.append(os.path.dirname(os.path.abspath(__file__)))
-
-from source.ASA.player import console
+import time
+import json
+from source.utility import console
 
 def get_coordinates(prompt_text):
     print(f"\n=======================================================")
@@ -52,11 +47,120 @@ def main():
     stations = load_or_create(stations_file, [])
     
     # --- PREFIXES ---
-    print("\n--- Teleporter Base Names ---")
+    print("\n--- Teleporter Base Names & Prefixes ---")
     gacha_prefix = input("Base name for Gacha Pairs (e.g., GachaBot_gachapair): ").strip() or "GachaBot_gachapair"
     pego_prefix = input("Base name for Pego Stations (e.g., GachaBot_Pego): ").strip() or "GachaBot_Pego"
     ytrap_prefix = input("Base name for Y-Trap Stations (e.g., GachaBot_ytrap): ").strip() or "GachaBot_ytrap"
     
+    render_tp = input("Name of your Render/Bed Spawn Teleporter (e.g., GachaBot_Render): ").strip() or "GachaBot_Render"
+    vault_tp = input("Name of your Vault/Dropoff Teleporter (e.g., GachaBot_vault01): ").strip() or "GachaBot_vault01"
+    dedi_tp = input("Name of your Dedi Teleporter (e.g., GachaBot_Dedi01): ").strip() or "GachaBot_Dedi01"
+    grindables_tp = input("Name of your Grindables Teleporter (e.g., GachaBot_Grindables01): ").strip() or "GachaBot_Grindables01"
+
+    for single_tp in [render_tp, vault_tp, dedi_tp, grindables_tp]:
+        if not any(s.get("name") == single_tp for s in stations):
+            print(f"Adding {single_tp} to stations.json... (Defaulting to Search Bar -1)")
+            stations.append({"name": single_tp, "xpos": -1, "ypos": -1, "zpos": -1, "yaw": 0, "pitch": 0})
+    save_json(stations_file, stations)
+
+    # -----------------------------------------------------
+    # VAULTS
+    # -----------------------------------------------------
+    try:
+        num_vaults = int(input("\nHow many Vaults do you have? (e.g. 3): ").strip() or 0)
+    except:
+        num_vaults = 0
+        
+    if num_vaults > 0:
+        vaults = []
+        for i in range(num_vaults):
+            side = "left" if i % 2 == 0 else "right"
+            items = input(f"What items go in Vault #{i+1} ({side} side)? (comma separated, e.g. mastercraft,journeyman,metal): ").strip().split(',')
+            yaw, pitch = get_coordinates(f"Teleport to {vault_tp}. Aim exactly at Vault #{i+1} ({side} side).")
+            vaults.append({
+                "name": f"vault{i+1}",
+                "side": side,
+                "items": [item.strip() for item in items if item.strip()],
+                "yaw": yaw,
+                "pitch": pitch
+            })
+        save_json("json_files/vaults.json", vaults)
+
+    # -----------------------------------------------------
+    # DEDIS
+    # -----------------------------------------------------
+    try:
+        num_dedi_groups = int(input("\nHow many Dedicated Storage GROUPS do you have? (e.g. 1): ").strip() or 0)
+    except:
+        num_dedi_groups = 0
+        
+    if num_dedi_groups > 0:
+        dedis = []
+        for i in range(num_dedi_groups):
+            group_id = input(f"What is the ID for Dedi Group #{i+1}? (e.g. deposit or grindables): ").strip()
+            try:
+                num_boxes = int(input(f"How many boxes in group '{group_id}'? ").strip() or 0)
+            except:
+                num_boxes = 0
+                
+            boxes = []
+            for j in range(num_boxes):
+                resource = input(f"What resource goes in Box #{j+1}? (e.g. element, metal): ").strip()
+                yaw, pitch = get_coordinates(f"Teleport to {dedi_tp}. Aim exactly at {resource} Box #{j+1}.")
+                crouch = input("Should the bot crouch for this box? (y/n): ").strip().lower().startswith('y')
+                boxes.append({
+                    "resource": resource,
+                    "crouched": crouch,
+                    "yaw": yaw,
+                    "pitch": pitch
+                })
+                
+            dedis.append({
+                "dediID": group_id,
+                "active": True,
+                "dediBoxes": boxes
+            })
+        save_json("json_files/dedis.json", dedis)
+
+    # -----------------------------------------------------
+    # GRINDER
+    # -----------------------------------------------------
+    ans = input("\nDo you want to calibrate the Grinder location? (y/n): ").strip().lower()
+    if ans.startswith('y'):
+        yaw, pitch = get_coordinates(f"Teleport to {grindables_tp}. Aim exactly at the Grinder.")
+        grinder_data = {"collect_yaw": yaw, "collect_pitch": pitch}
+        save_json("json_files/grinder.json", grinder_data)
+
+    # -----------------------------------------------------
+    # PEGO STATIONS
+    # -----------------------------------------------------
+    try:
+        num_pegos = int(input("\nHow many Pego stations do you have? (e.g. 4): ").strip() or 0)
+    except:
+        num_pegos = 0
+        
+    if num_pegos > 0:
+        pegos = []
+        for i in range(num_pegos):
+            tp_name = f"{pego_prefix}{i+1:02d}"
+            delay = 3300 # default delay
+            
+            if not any(s.get("name") == tp_name for s in stations):
+                print(f"Adding {tp_name} to stations.json... (Defaulting to Search Bar -1)")
+                stations.append({"name": tp_name, "xpos": -1, "ypos": -1, "zpos": -1, "yaw": 0, "pitch": 0})
+                save_json(stations_file, stations)
+                
+            yaw, pitch = get_coordinates(f"Teleport to {tp_name}. Aim exactly at Pego #{i+1}.")
+            
+            pegos.append({
+                "name": tp_name,
+                "teleporter": tp_name,
+                "delay": delay,
+                "yaw": yaw,
+                "pitch": pitch
+            })
+        save_json("json_files/pego.json", pegos)
+
     # -----------------------------------------------------
     # GACHAS
     # -----------------------------------------------------
@@ -65,56 +169,54 @@ def main():
     except:
         num_gacha_pairs = 0
         
-    gachas = []
-    copy_gachas = False
-    gacha_offsets = {} 
-    
-    if num_gacha_pairs > 1:
-        ans = input("Are all your Gacha stations built IDENTICALLY? (If yes, we will only calibrate Pair 1 and copy the angles) (y/n): ").strip().lower()
-        if ans.startswith('y'):
-            copy_gachas = True
-            
-    for i in range(num_gacha_pairs):
-        # Format with leading zero if needed, e.g. 01, 02
-        pair_num_str = f"{i+1:02d}"
-        tp_name = f"{gacha_prefix}{pair_num_str}"
+    if num_gacha_pairs > 0:
+        gachas = []
+        copy_gachas = False
+        gacha_offsets = {} 
         
-        # Ensure teleporter exists in stations.json
-        if not any(s.get("name") == tp_name for s in stations):
-            print(f"\nAdding {tp_name} to stations.json... (We will default X, Y, Z to -1 to use search bar)")
-            if copy_gachas and i > 0:
-                 # Just use 0.0 base yaw for copied stations since relative angles apply to map coords
-                 base_yaw = 0.0
-            else:
-                 base_yaw, _ = get_coordinates(f"Teleport to {tp_name}, DO NOT MOVE YOUR CAMERA. We need the base teleporter Yaw.")
-            stations.append({"name": tp_name, "xpos": -1, "ypos": -1, "zpos": -1, "yaw": base_yaw, "pitch": 0})
-            save_json(stations_file, stations)
+        if num_gacha_pairs > 1:
+            ans = input("Are all your Gacha stations built IDENTICALLY? (If yes, we will only calibrate Pair 1 and copy the angles) (y/n): ").strip().lower()
+            if ans.startswith('y'):
+                copy_gachas = True
+                
+        for i in range(num_gacha_pairs):
+            pair_num_str = f"{i+1:02d}"
+            tp_name = f"{gacha_prefix}{pair_num_str}"
             
-        base_yaw = next((s["yaw"] for s in stations if s["name"] == tp_name), 0.0)
+            if not any(s.get("name") == tp_name for s in stations):
+                print(f"\nAdding {tp_name} to stations.json... (Defaulting X, Y, Z to -1)")
+                if copy_gachas and i > 0:
+                     base_yaw = 0.0
+                else:
+                     base_yaw, _ = get_coordinates(f"Teleport to {tp_name}, DO NOT MOVE YOUR CAMERA. We need the base teleporter Yaw.")
+                stations.append({"name": tp_name, "xpos": -1, "ypos": -1, "zpos": -1, "yaw": base_yaw, "pitch": 0})
+                save_json(stations_file, stations)
+                
+            base_yaw = next((s["yaw"] for s in stations if s["name"] == tp_name), 0.0)
 
-        for side in ["left", "right"]:
-            gacha_name = f"gacha{(i*2) + (1 if side=='left' else 2)}"
-            
-            if copy_gachas and i > 0:
-                print(f"Auto-calculating {gacha_name} ({side})...")
-                yaw_offset, pitch = gacha_offsets[side]
-                yaw = normalize_yaw(base_yaw + yaw_offset)
-            else:
-                yaw, pitch = get_coordinates(f"Teleport to {tp_name}. Aim exactly at {gacha_name} ({side} side).")
-                if copy_gachas and i == 0:
-                    yaw_offset = normalize_yaw(yaw - base_yaw)
-                    gacha_offsets[side] = (yaw_offset, pitch)
+            for side in ["left", "right"]:
+                gacha_name = f"gacha{(i*2) + (1 if side=='left' else 2)}"
+                
+                if copy_gachas and i > 0:
+                    print(f"Auto-calculating {gacha_name} ({side})...")
+                    yaw_offset, pitch = gacha_offsets[side]
+                    yaw = normalize_yaw(base_yaw + yaw_offset)
+                else:
+                    yaw, pitch = get_coordinates(f"Teleport to {tp_name}. Aim exactly at {gacha_name} ({side} side).")
+                    if copy_gachas and i == 0:
+                        yaw_offset = normalize_yaw(yaw - base_yaw)
+                        gacha_offsets[side] = (yaw_offset, pitch)
 
-            gachas.append({
-                "name": gacha_name,
-                "teleporter": tp_name,
-                "resource_type": "element",
-                "side": side,
-                "yaw": yaw,
-                "pitch": pitch
-            })
-            
-    save_json("json_files/gacha.json", gachas)
+                gachas.append({
+                    "name": gacha_name,
+                    "teleporter": tp_name,
+                    "resource_type": "element",
+                    "side": side,
+                    "yaw": yaw,
+                    "pitch": pitch
+                })
+                
+        save_json("json_files/gacha.json", gachas)
 
     # -----------------------------------------------------
     # Y-TRAP STATIONS
@@ -138,7 +240,6 @@ def main():
             
         if num_plots > 0:
             print("\nWe will calibrate the crop plots for the FIRST Y-Trap station only. The bot assumes the rest are built identically!")
-            
             left_plots = []
             right_plots = []
             
@@ -157,31 +258,6 @@ def main():
                 crouch = input("Should the bot crouch for this crop plot? (y/n): ").strip().lower().startswith('y')
                 right_plots.append({"yaw": yaw, "pitch": pitch, "crouched": crouch})
             save_json("json_files/ytrap_right_plots.json", right_plots)
-
-    # -----------------------------------------------------
-    # PEGO STATIONS
-    # -----------------------------------------------------
-    try:
-        num_pegos = int(input("\nHow many Pego stations do you have? (e.g. 4): ").strip() or 0)
-    except:
-        num_pegos = 0
-        
-    pegos = []
-    for i in range(num_pegos):
-        tp_name = f"{pego_prefix}{i+1:02d}"
-        delay = 3300 # default delay
-        
-        if not any(s.get("name") == tp_name for s in stations):
-            print(f"\nAdding {tp_name} to stations.json... (Defaulting to Search Bar -1)")
-            stations.append({"name": tp_name, "xpos": -1, "ypos": -1, "zpos": -1, "yaw": 0, "pitch": 0})
-            save_json(stations_file, stations)
-            
-        pegos.append({
-            "name": tp_name,
-            "teleporter": tp_name,
-            "delay": delay
-        })
-    save_json("json_files/pego.json", pegos)
 
     print("\n=======================================================")
     print("Setup and Calibration Complete! Your JSON files have been fully generated.")
