@@ -68,17 +68,11 @@ def main():
     # -----------------------------------------------------
     ans = input(f"\nDo you want to calibrate the Tek Bed location for {render_tp}? (y/n): ").strip().lower()
     if ans.startswith('y'):
-        base_yaw, _ = get_coordinates(f"Teleport to {render_tp}, DO NOT MOVE YOUR CAMERA. We need the base teleporter Yaw.")
-        yaw, pitch = get_coordinates(f"Aim exactly at the Tek Bed.")
-        
-        # Calculate the relative turn offset needed from the spawn point
-        target_yaw = normalize_yaw(yaw - base_yaw)
-        
+        yaw, pitch = get_coordinates(f"Teleport to {render_tp}. Aim exactly at the Tek Bed.")
         for s in stations:
             if s["name"] == render_tp:
-                s["yaw"] = 0.0 # Force base yaw to 0 so the relative turn works perfectly
-                s["target_yaw"] = target_yaw
-                s["target_pitch"] = pitch
+                s["yaw"] = yaw
+                s["pitch"] = pitch
                 break
         save_json(stations_file, stations)
 
@@ -276,14 +270,12 @@ def main():
             left_plots = []
             right_plots = []
             
-            base_yaw, _ = get_coordinates(f"Teleport to {ytrap_prefix}01, DO NOT MOVE YOUR CAMERA. We need the base teleporter Yaw.")
-            
             # Left Stack
             print(f"\n--- Calibrating {num_plots} LEFT Stack Crop Plots ---")
             for j in range(num_plots):
                 yaw, pitch = get_coordinates(f"Aim exactly at LEFT Stack Crop Plot #{j+1}.")
                 crouch = input("Should the bot crouch for this crop plot? (y/n): ").strip().lower().startswith('y')
-                left_plots.append({"yaw": normalize_yaw(yaw - base_yaw), "pitch": pitch, "crouched": crouch})
+                left_plots.append({"yaw": yaw, "pitch": pitch, "crouched": crouch})
             save_json("json_files/ytrap_left_plots.json", left_plots)
             
             # Right Stack
@@ -291,7 +283,7 @@ def main():
             for j in range(num_plots):
                 yaw, pitch = get_coordinates(f"Aim exactly at RIGHT Stack Crop Plot #{j+1}.")
                 crouch = input("Should the bot crouch for this crop plot? (y/n): ").strip().lower().startswith('y')
-                right_plots.append({"yaw": normalize_yaw(yaw - base_yaw), "pitch": pitch, "crouched": crouch})
+                right_plots.append({"yaw": yaw, "pitch": pitch, "crouched": crouch})
             save_json("json_files/ytrap_right_plots.json", right_plots)
 
     print("\n=======================================================")

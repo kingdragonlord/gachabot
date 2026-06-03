@@ -114,9 +114,7 @@ def teleport_not_default(arg):
             utils.current_pitch = 0
             utils.turn_down(80)
             time.sleep(0.2)
-        utils.turn_up(80)
-        time.sleep(0.2) 
-        utils.set_yaw(stationdata.yaw)
+            utils.set_yaw(stationdata.yaw)
         
             
 

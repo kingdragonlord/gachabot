@@ -12,8 +12,6 @@ class station_metadata():
         self.pitch = 0
         self.side = None
         self.resource = None
-        self.target_yaw = None
-        self.target_pitch = None
 
 def get_custom_stations():
     file_path = "json_files/stations.json"
@@ -45,8 +43,6 @@ def get_station_metadata(teleporter_name:str):
                 stationdata.zpos = entry_station["zpos"]
                 stationdata.yaw  = entry_station["yaw"]
                 stationdata.pitch = entry_station.get("pitch", 0)
-                stationdata.target_yaw = entry_station.get("target_yaw", None)
-                stationdata.target_pitch = entry_station.get("target_pitch", None)
                 foundstation = True
                 break
 

@@ -26,8 +26,8 @@ def enter_tekpod(metadata=None):
         time.sleep(0.5*settings.lag_offset)    
         utils.press_key("Run") #uncrouching char just in case
         
-        if metadata and getattr(metadata, "target_yaw", None) is not None:
-            utils.turn_to(metadata.target_yaw, metadata.target_pitch)
+        if metadata and getattr(metadata, "yaw", None) is not None:
+            utils.turn_to(metadata.yaw, metadata.pitch)
         else:
             utils.zero()
             utils.set_yaw(settings.station_yaw)
@@ -41,8 +41,8 @@ def enter_tekpod(metadata=None):
             time.sleep(0.5*settings.lag_offset)    
             utils.press_key("Run") 
             
-            if metadata and getattr(metadata, "target_yaw", None) is not None:
-                utils.turn_to(metadata.target_yaw, metadata.target_pitch)
+            if metadata and getattr(metadata, "yaw", None) is not None:
+                utils.turn_to(metadata.yaw, metadata.pitch)
             else:
                 utils.zero()
                 utils.set_yaw(settings.station_yaw)
