@@ -111,6 +111,7 @@ def main():
         dedis = []
         for i in range(num_dedi_groups):
             group_id = input(f"What is the ID for Dedi Group #{i+1}? (e.g. deposit or grindables): ").strip()
+            current_tp = input(f"What teleporter is Dedi Group '{group_id}' located at? (e.g. {dedi_tp} or {grindables_tp}): ").strip() or dedi_tp
             try:
                 num_boxes = int(input(f"How many boxes in group '{group_id}'? ").strip() or 0)
             except:
@@ -119,7 +120,7 @@ def main():
             boxes = []
             for j in range(num_boxes):
                 resource = input(f"What resource goes in Box #{j+1}? (e.g. element, metal): ").strip()
-                yaw, pitch = get_coordinates(f"Teleport to {dedi_tp}. Aim exactly at {resource} Box #{j+1}.")
+                yaw, pitch = get_coordinates(f"Teleport to {current_tp}. Aim exactly at {resource} Box #{j+1}.")
                 crouch = input("Should the bot crouch for this box? (y/n): ").strip().lower().startswith('y')
                 boxes.append({
                     "resource": resource,
