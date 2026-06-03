@@ -137,12 +137,25 @@ def main():
         save_json("json_files/dedis.json", dedis)
 
     # -----------------------------------------------------
-    # GRINDER
+    # GRINDERS
     # -----------------------------------------------------
-    ans = input("\nDo you want to calibrate the Grinder location? (y/n): ").strip().lower()
-    if ans.startswith('y'):
+    grinder_data = {}
+    
+    # Vault Grinder (Deposit)
+    ans1 = input("\nDo you want to calibrate the Grinder location at your VAULT teleporter? (y/n): ").strip().lower()
+    if ans1.startswith('y'):
+        yaw, pitch = get_coordinates(f"Teleport to {vault_tp}. Aim exactly at the Grinder.")
+        grinder_data["deposit_yaw"] = yaw
+        grinder_data["deposit_pitch"] = pitch
+
+    # Grindables Grinder (Collect)
+    ans2 = input("\nDo you want to calibrate the Grinder location at your GRINDABLES teleporter? (y/n): ").strip().lower()
+    if ans2.startswith('y'):
         yaw, pitch = get_coordinates(f"Teleport to {grindables_tp}. Aim exactly at the Grinder.")
-        grinder_data = {"collect_yaw": yaw, "collect_pitch": pitch}
+        grinder_data["collect_yaw"] = yaw
+        grinder_data["collect_pitch"] = pitch
+
+    if grinder_data:
         save_json("json_files/grinder.json", grinder_data)
 
     # -----------------------------------------------------

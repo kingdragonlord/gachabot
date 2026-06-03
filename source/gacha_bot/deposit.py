@@ -97,7 +97,19 @@ def drop_useless():
     player_inventory.close()
 
 def depo_grinder(metadata):
-    utils.turn_right(180)
+    try:
+        with open("json_files/grinder.json", "r") as f:
+            g_data = json.load(f)
+            if "deposit_yaw" in g_data and "deposit_pitch" in g_data:
+                utils.turn_to(g_data["deposit_yaw"], g_data["deposit_pitch"])
+            else:
+                utils.set_yaw(metadata.yaw)
+                utils.turn_right(180)
+    except Exception as e:
+        logs.logger.debug(f"Could not load grinder.json for deposit: {e}")
+        utils.set_yaw(metadata.yaw)
+        utils.turn_right(180)
+        
     time.sleep(0.5*settings.lag_offset)
     inventory.open()
     attempt = 0
@@ -106,8 +118,18 @@ def depo_grinder(metadata):
         logs.logger.error("couldnt open up the grinder while trying to deposit")
         inventory.close()
         utils.zero()
-        utils.set_yaw(metadata.yaw)
-        utils.turn_right(180)
+        try:
+            with open("json_files/grinder.json", "r") as f:
+                g_data = json.load(f)
+                if "deposit_yaw" in g_data and "deposit_pitch" in g_data:
+                    utils.turn_to(g_data["deposit_yaw"], g_data["deposit_pitch"])
+                else:
+                    utils.set_yaw(metadata.yaw)
+                    utils.turn_right(180)
+        except:
+            utils.set_yaw(metadata.yaw)
+            utils.turn_right(180)
+            
         time.sleep(0.5*settings.lag_offset)
         inventory.open()
         if attempt >= source.gacha_bot.config.grinder_attempts:
