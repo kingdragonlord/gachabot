@@ -2,28 +2,28 @@
     {
         "name": "GachaBot_Pego01",
         "teleporter": "GachaBot_Pego01",
-        "delay": 3300,
+        "delay": 2400,
         "yaw": 47.58,
         "pitch": 4.65
     },
     {
         "name": "GachaBot_Pego02",
         "teleporter": "GachaBot_Pego02",
-        "delay": 3300,
+        "delay": 2400,
         "yaw": 53.49,
         "pitch": 6.44
     },
     {
         "name": "GachaBot_Pego03",
         "teleporter": "GachaBot_Pego03",
-        "delay": 3300,
+        "delay": 2400,
         "yaw": 59.57,
         "pitch": 3.39
     },
     {
         "name": "GachaBot_Pego04",
         "teleporter": "GachaBot_Pego04",
-        "delay": 3300,
+        "delay": 2400,
         "yaw": 79.64,
         "pitch": 4.81
     }
