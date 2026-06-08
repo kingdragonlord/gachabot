@@ -25,7 +25,8 @@ def pego_pickup(metadata):
 
     # First, let's try the exact configured pitch/yaw in case it works
     if target_yaw is not None and target_pitch is not None:
-        utils.turn_to(target_yaw, target_pitch)
+        utils.set_yaw(target_yaw)
+        utils.set_pitch(target_pitch)
     else:
         utils.set_pitch(target_pitch)
         

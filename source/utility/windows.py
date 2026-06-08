@@ -8,6 +8,18 @@ def find_window_by_title(title):
 
 hwnd = find_window_by_title("ArkAscended") 
 
+def focus_game():
+    import win32gui
+    import win32com.client
+    try:
+        # Alt-tab workaround to forcefully bring window to foreground
+        shell = win32com.client.Dispatch("WScript.Shell")
+        shell.SendKeys('%')
+        win32gui.SetForegroundWindow(hwnd)
+    except Exception as e:
+        from source.logs import gachalogs as logs
+        logs.logger.warning(f"Could not bring Ark to foreground: {e}")
+
 INPUT_MOUSE = 0
 MOUSEEVENTF_MOVE = 0x0001
 MOUSEEVENTF_MOVE_NOCOALESCE = 0x2000

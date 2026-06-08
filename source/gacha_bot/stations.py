@@ -43,7 +43,7 @@ class gacha_station(base_task):
 
 
     def execute(self):
-        player_state.check_state()
+        player_state.check_state(False)
         
         temp = False
         time_between = time.time() - state.last_berry
@@ -112,19 +112,26 @@ class gacha_station(base_task):
             iguanadon.iguanadon(iguanadon_metadata)
             teleporter.teleport_not_default(gacha_metadata)
             if settings.side_crop_plot:
-                gacha.drop_off(gacha_metadata)
+                status = gacha.drop_off(gacha_metadata)
             else:
-                gacha.drop_off_nocrop(gacha_metadata)
+                status = gacha.drop_off_nocrop(gacha_metadata)
+                
+            if status == "DRIFT_DETECTED":
+                logs.logger.warning(f"Aborting {self.name} due to drift. Triggering bed realignment.")
+                from task_manager import task_scheduler
+                scheduler = task_scheduler()
+                # Queue a realign task at priority 1 (highest) so it runs immediately
+                realign_task = realign_station("drift_realign")
+                scheduler.add_task(realign_task, priority_flag=True)
+                # Mark self as NOT run so it gets requeued to try again after realign
+                self.has_run_before = False
+                return
 
     def get_priority_level(self):
         return 3
     
     def get_requeue_delay(self):
-        if settings.seeds_230:
-            delay = 10700  # should take about this amount of time to do 230 slots of seeds 
-        else:
-            delay = 6600    # delay can be constant as it will be the same for all gachas 142 stacks took 110 mins
-        return delay 
+        return 0 
 
 class pego_station(base_task):
     def __init__(self,name,teleporter_name,delay):
@@ -134,7 +141,7 @@ class pego_station(base_task):
         self.delay = delay
 
     def execute(self):
-        player_state.check_state()
+        player_state.check_state(False)
         
         pego_metadata = custom_stations.get_station_metadata(self.teleporter_name)
         dropoff_metadata = custom_stations.get_station_metadata(settings.drop_off)
@@ -148,10 +155,10 @@ class pego_station(base_task):
             logs.logger.info(f"bot has no crystals in hotbar we are skipping the deposit step")
 
     def get_priority_level(self):
-        return 2 # highest prio level as we cant have these get capped 
+        return 2 # Match gacha_station priority to enable perfect round-robin looping
 
     def get_requeue_delay(self):
-        return self.delay # delay cannot be constant as stations can cover different amounts of space each |||| 2 stacks of berries to 1 crystal 4 gachas to 1 pego
+        return self.delay
     
     
 class render_station(base_task):
@@ -172,10 +179,33 @@ class render_station(base_task):
             player_inventory.close()
             tribelog.open()
     def get_priority_level(self):
-        return 8
+        return 3 # Match gacha_station priority to enable perfect round-robin looping
 
     def get_requeue_delay(self):
-        return 90 # after triggered we will wait for 60 seconds reduces the amount of cpu usage 
+        return 0
+
+class realign_station(base_task):
+    def __init__(self, name="realign"):
+        super().__init__()
+        self.name = name
+        
+    def execute(self):
+        player_state.check_state(False)
+        logs.logger.info(f"Realigning character at {settings.bed_spawn}")
+        teleporter.teleport_not_default(settings.bed_spawn)
+        render_metadata = custom_stations.get_station_metadata(settings.bed_spawn)
+        render.enter_tekpod(render_metadata)
+        
+        from source.ASA.player import tribelog
+        tribelog.open()
+        time.sleep(2)
+        
+    def get_priority_level(self):
+        return 3
+
+    def get_requeue_delay(self):
+        return 6600
+
     
 class snail_pheonix(base_task):
     def __init__(self,name,teleporter_name,direction,depo):
@@ -220,7 +250,8 @@ class pause(base_task):
     def execute(self):
         player_state.check_state()
         teleporter.teleport_not_default(settings.bed_spawn)
-        render.enter_tekpod()
+        render_metadata = custom_stations.get_station_metadata(settings.bed_spawn)
+        render.enter_tekpod(render_metadata)
         time.sleep(self.time)
         render.leave_tekpod()
         

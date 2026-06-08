@@ -34,17 +34,27 @@ def harvest_stack(side):
         target_yaw = plot.get("yaw", None)
         should_crouch = plot.get("crouched", False)
         
+        # 1. Aim first. If we are currently crouched and we need to aim with ccc, explicitly uncrouch FIRST!
+        # ccc forces a stand-up, which plays an animation that blocks further crouch inputs if we don't wait.
+        if target_yaw is not None:
+            if current_crouch:
+                player_state.human.reset_crouch()
+                current_crouch = False
+                time.sleep(1.5 * settings.lag_offset) # Let the stand-up animation finish
+            
+            utils.set_yaw(target_yaw)
+            current_crouch = False # Just in case
+            utils.set_pitch(target_pitch)
+        else:
+            utils.set_pitch(target_pitch)
+            
+        # 2. Apply crouching if needed
         if should_crouch and not current_crouch:
             player_state.human.crouch()
             current_crouch = True
         elif not should_crouch and current_crouch:
             player_state.human.reset_crouch()
             current_crouch = False
-            
-        if target_yaw is not None:
-            utils.turn_to(target_yaw, target_pitch)
-        else:
-            utils.set_pitch(target_pitch)
             
         time.sleep(0.2*settings.lag_offset)
         harvest_crop()

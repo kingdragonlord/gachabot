@@ -2,11 +2,32 @@
     {
         "name": "vault1",
         "side": "left",
-        "items":["fabricated","pump","assault"]
+        "items": [
+            "fabricated",
+            "assault",
+            "pump"
+        ],
+        "yaw": 75.35,
+        "pitch": -19.73
     },
     {
         "name": "vault2",
         "side": "right",
-        "items":["riot","cliff","tree","behe"]
+        "items": [
+            "riot"
+        ],
+        "yaw": 163.5,
+        "pitch": -12.61
+    },
+    {
+        "name": "vault3",
+        "side": "left",
+        "items": [
+            "cliff",
+            "tree",
+            "behe"
+        ],
+        "yaw": -105.29,
+        "pitch": -19.58
     }
 ]

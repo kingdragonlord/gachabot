@@ -17,7 +17,13 @@ def find_screen_size():
         print(f"application size is {width}x{height}")
         return width,height
     
-screen_width,screen_height = find_screen_size()
+screen_size = find_screen_size()
+if screen_size is None:
+    print("ArkAscended window not found. Please make sure the game is running.")
+    input("") # prevents the closing of the window instantly
+    exit()
+
+screen_width,screen_height = screen_size
 
 if (screen_width,screen_height) == (1920,1080):
     mon = {"top": 0, "left": 0, "width": 1920, "height": 1080}

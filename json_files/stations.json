@@ -21,13 +21,397 @@
         "ypos": 820634,
         "zpos": -3194,
         "yaw": 161.03,
-        "pitch": 0.00
+        "pitch": 0.0
     },
     {
         "name": "ytrap1",
         "xpos": 821239,
         "ypos": 821237,
         "zpos": -5417,
+        "yaw": 0,
+        "pitch": 0
+    },
+    {
+        "name": "gachabot_render",
+        "xpos": -1,
+        "ypos": -1,
+        "zpos": -1,
+        "yaw": 73.07,
+        "pitch": -29.75
+    },
+    {
+        "name": "gachabot_vault01",
+        "xpos": -1,
+        "ypos": -1,
+        "zpos": -1,
+        "yaw": 0.0,
+        "pitch": 0.0
+    },
+    {
+        "name": "gachabot_dedi01",
+        "xpos": -1,
+        "ypos": -1,
+        "zpos": -1,
+        "yaw": 0.0,
+        "pitch": 0.0
+    },
+    {
+        "name": "gachabot_grindables01",
+        "xpos": -1,
+        "ypos": -1,
+        "zpos": -1,
+        "yaw": 0.0,
+        "pitch": 0.0
+    },
+    {
+        "name": "GachaBot_Render",
+        "xpos": -1,
+        "ypos": -1,
+        "zpos": -1,
+        "yaw": 73.07,
+        "pitch": -29.75
+    },
+    {
+        "name": "GachaBot_vault01",
+        "xpos": -1,
+        "ypos": -1,
+        "zpos": -1,
+        "yaw": 0.0,
+        "pitch": 0.0
+    },
+    {
+        "name": "GachaBot_Dedi01",
+        "xpos": -1,
+        "ypos": -1,
+        "zpos": -1,
+        "yaw": 0.0,
+        "pitch": 0.0
+    },
+    {
+        "name": "GachaBot_Grindables01",
+        "xpos": -1,
+        "ypos": -1,
+        "zpos": -1,
+        "yaw": 0.0,
+        "pitch": 0.0
+    },
+    {
+        "name": "GachaBot_Pego01",
+        "xpos": -1,
+        "ypos": -1,
+        "zpos": -1,
+        "yaw": 0,
+        "pitch": 0
+    },
+    {
+        "name": "GachaBot_Pego02",
+        "xpos": -1,
+        "ypos": -1,
+        "zpos": -1,
+        "yaw": 0,
+        "pitch": 0
+    },
+    {
+        "name": "GachaBot_Pego03",
+        "xpos": 112062,
+        "ypos": -466629,
+        "zpos": -38277,
+        "yaw": 59.57,
+        "pitch": 3.39
+    },
+    {
+        "name": "GachaBot_Pego04",
+        "xpos": 109497,
+        "ypos": -462231,
+        "zpos": -38277,
+        "yaw": 79.64,
+        "pitch": 4.81
+    },
+    {
+        "name": "GachaBot_gachapair01",
+        "xpos": -1,
+        "ypos": -1,
+        "zpos": -1,
+        "yaw": -151.45,
+        "pitch": 0
+    },
+    {
+        "name": "GachaBot_gachapair02",
+        "xpos": -1,
+        "ypos": -1,
+        "zpos": -1,
+        "yaw": 0.0,
+        "pitch": 0
+    },
+    {
+        "name": "GachaBot_gachapair03",
+        "xpos": -1,
+        "ypos": -1,
+        "zpos": -1,
+        "yaw": 0.0,
+        "pitch": 0
+    },
+    {
+        "name": "GachaBot_gachapair04",
+        "xpos": -1,
+        "ypos": -1,
+        "zpos": -1,
+        "yaw": 0.0,
+        "pitch": 0
+    },
+    {
+        "name": "GachaBot_gachapair05",
+        "xpos": -1,
+        "ypos": -1,
+        "zpos": -1,
+        "yaw": 0.0,
+        "pitch": 0
+    },
+    {
+        "name": "GachaBot_gachapair06",
+        "xpos": -1,
+        "ypos": -1,
+        "zpos": -1,
+        "yaw": 0.0,
+        "pitch": 0
+    },
+    {
+        "name": "GachaBot_gachapair07",
+        "xpos": -1,
+        "ypos": -1,
+        "zpos": -1,
+        "yaw": 0.0,
+        "pitch": 0
+    },
+    {
+        "name": "GachaBot_gachapair08",
+        "xpos": -1,
+        "ypos": -1,
+        "zpos": -1,
+        "yaw": 0.0,
+        "pitch": 0
+    },
+    {
+        "name": "GachaBot_gachapair09",
+        "xpos": -1,
+        "ypos": -1,
+        "zpos": -1,
+        "yaw": 0.0,
+        "pitch": 0
+    },
+    {
+        "name": "GachaBot_gachapair10",
+        "xpos": -1,
+        "ypos": -1,
+        "zpos": -1,
+        "yaw": 0.0,
+        "pitch": 0
+    },
+    {
+        "name": "GachaBot_gachapair11",
+        "xpos": -1,
+        "ypos": -1,
+        "zpos": -1,
+        "yaw": 0.0,
+        "pitch": 0
+    },
+    {
+        "name": "GachaBot_gachapair12",
+        "xpos": -1,
+        "ypos": -1,
+        "zpos": -1,
+        "yaw": 0.0,
+        "pitch": 0
+    },
+    {
+        "name": "GachaBot_gachapair13",
+        "xpos": -1,
+        "ypos": -1,
+        "zpos": -1,
+        "yaw": 0.0,
+        "pitch": 0
+    },
+    {
+        "name": "GachaBot_gachapair14",
+        "xpos": -1,
+        "ypos": -1,
+        "zpos": -1,
+        "yaw": 0.0,
+        "pitch": 0
+    },
+    {
+        "name": "GachaBot_gachapair15",
+        "xpos": -1,
+        "ypos": -1,
+        "zpos": -1,
+        "yaw": 0.0,
+        "pitch": 0
+    },
+    {
+        "name": "GachaBot_gachapair16",
+        "xpos": -1,
+        "ypos": -1,
+        "zpos": -1,
+        "yaw": 0.0,
+        "pitch": 0
+    },
+    {
+        "name": "GachaBot_gachapair17",
+        "xpos": -1,
+        "ypos": -1,
+        "zpos": -1,
+        "yaw": 0.0,
+        "pitch": 0
+    },
+    {
+        "name": "GachaBot_gachapair18",
+        "xpos": -1,
+        "ypos": -1,
+        "zpos": -1,
+        "yaw": 0.0,
+        "pitch": 0
+    },
+    {
+        "name": "GachaBot_ytrap01",
+        "xpos": -1,
+        "ypos": -1,
+        "zpos": -1,
+        "yaw": 0,
+        "pitch": 0
+    },
+    {
+        "name": "GachaBot_ytrap02",
+        "xpos": -1,
+        "ypos": -1,
+        "zpos": -1,
+        "yaw": 0,
+        "pitch": 0
+    },
+    {
+        "name": "GachaBot_ytrap03",
+        "xpos": -1,
+        "ypos": -1,
+        "zpos": -1,
+        "yaw": 0,
+        "pitch": 0
+    },
+    {
+        "name": "GachaBot_ytrap04",
+        "xpos": -1,
+        "ypos": -1,
+        "zpos": -1,
+        "yaw": 0,
+        "pitch": 0
+    },
+    {
+        "name": "GachaBot_ytrap05",
+        "xpos": -1,
+        "ypos": -1,
+        "zpos": -1,
+        "yaw": 0,
+        "pitch": 0
+    },
+    {
+        "name": "GachaBot_ytrap06",
+        "xpos": -1,
+        "ypos": -1,
+        "zpos": -1,
+        "yaw": 0,
+        "pitch": 0
+    },
+    {
+        "name": "GachaBot_ytrap07",
+        "xpos": -1,
+        "ypos": -1,
+        "zpos": -1,
+        "yaw": 0,
+        "pitch": 0
+    },
+    {
+        "name": "GachaBot_ytrap08",
+        "xpos": -1,
+        "ypos": -1,
+        "zpos": -1,
+        "yaw": 0,
+        "pitch": 0
+    },
+    {
+        "name": "GachaBot_ytrap09",
+        "xpos": -1,
+        "ypos": -1,
+        "zpos": -1,
+        "yaw": 0,
+        "pitch": 0
+    },
+    {
+        "name": "GachaBot_ytrap10",
+        "xpos": -1,
+        "ypos": -1,
+        "zpos": -1,
+        "yaw": 0,
+        "pitch": 0
+    },
+    {
+        "name": "GachaBot_ytrap11",
+        "xpos": -1,
+        "ypos": -1,
+        "zpos": -1,
+        "yaw": 0,
+        "pitch": 0
+    },
+    {
+        "name": "GachaBot_ytrap12",
+        "xpos": -1,
+        "ypos": -1,
+        "zpos": -1,
+        "yaw": 0,
+        "pitch": 0
+    },
+    {
+        "name": "GachaBot_ytrap13",
+        "xpos": -1,
+        "ypos": -1,
+        "zpos": -1,
+        "yaw": 0,
+        "pitch": 0
+    },
+    {
+        "name": "GachaBot_ytrap14",
+        "xpos": -1,
+        "ypos": -1,
+        "zpos": -1,
+        "yaw": 0,
+        "pitch": 0
+    },
+    {
+        "name": "GachaBot_ytrap15",
+        "xpos": -1,
+        "ypos": -1,
+        "zpos": -1,
+        "yaw": 0,
+        "pitch": 0
+    },
+    {
+        "name": "GachaBot_ytrap16",
+        "xpos": -1,
+        "ypos": -1,
+        "zpos": -1,
+        "yaw": 0,
+        "pitch": 0
+    },
+    {
+        "name": "GachaBot_ytrap17",
+        "xpos": -1,
+        "ypos": -1,
+        "zpos": -1,
+        "yaw": 0,
+        "pitch": 0
+    },
+    {
+        "name": "GachaBot_ytrap18",
+        "xpos": -1,
+        "ypos": -1,
+        "zpos": -1,
         "yaw": 0,
         "pitch": 0
     }

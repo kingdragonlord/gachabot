@@ -10,7 +10,7 @@ import win32clipboard
 last_command = ""
 
 def is_open():
-    return template.console_strip_check(template.console_strip_bottom()) or template.console_strip_check(template.console_strip_middle())
+    return template.console_strip_check(template.console_strip_bottom(), is_bottom=True) or template.console_strip_check(template.console_strip_middle(), is_bottom=False)
 
 def enter_data(data:str):
     global last_command
@@ -40,29 +40,50 @@ def console_ccc():
         attempts += 1
         logs.logger.debug(f"trying to get ccc data {attempts} / {source.ASA.config.console_ccc_attempts}")
         player_state.reset_state() #reset state at the start to make sure we can open up the console window
-        count = 0
-        while not is_open():
-            count += 1
-            utils.press_key("ConsoleKeys")
-            template.template_await_true(is_open,1)
-            if count >= source.ASA.config.console_open_attempts:
-                logs.logger.error(f"console didnt open after {count} attempts")
-                break
-        if is_open():
-            middle = template.console_strip_check(template.console_strip_middle())
-            if attempts >= source.ASA.config.console_ccc_attempts:
-                console_write("ccc")
-            else: 
-                enter_data("ccc")
-                close_console(middle)
+        time.sleep(0.5 * settings.lag_offset) # wait for any UI closing animations to finish before pressing console key
+        # Blindly press ConsoleKeys to open console
+        utils.press_key("ConsoleKeys")
+        time.sleep(0.3 * settings.lag_offset) # wait for console to open visually
+        
+        # CLEAR THE CLIPBOARD BEFORE DOING ANYTHING to prevent reading old data on failure
+        try:
+            win32clipboard.OpenClipboard()
+            win32clipboard.EmptyClipboard()
+            win32clipboard.CloseClipboard()
+        except Exception:
+            pass
+
+        if attempts >= source.ASA.config.console_ccc_attempts:
+            # Type manually
+            last_command = "ccc"
+            enter_data("ccc")
+            time.sleep(0.1*settings.lag_offset)
+            utils.press_key("Enter")
+        else: 
+            enter_data("ccc")
+            time.sleep(0.1*settings.lag_offset)
+            utils.press_key("Enter")
             
-            time.sleep(0.1*settings.lag_offset) # slow to try and prevent opening clipboard to empty data
+        time.sleep(0.1*settings.lag_offset) # slow to try and prevent opening clipboard to empty data
+        try:
+            win32clipboard.OpenClipboard()
+            data = win32clipboard.GetClipboardData()
+            win32clipboard.EmptyClipboard()
+        except Exception:
+            pass
+        finally:
             try:
-                win32clipboard.OpenClipboard()
-                data = win32clipboard.GetClipboardData()
-                win32clipboard.EmptyClipboard()
-            finally:
                 win32clipboard.CloseClipboard()
+            except:
+                pass
+        
+        if data is None:
+            # If data is None, we failed to get CCC coordinates. 
+            # This almost always means the console wasn't open and we accidentally opened the chat instead.
+            # Press Escape to close the chat so we don't get stuck typing commands into it.
+            logs.logger.warning("Failed to get CCC data! Pressing Escape to clear chat box.")
+            utils.press_key("Escape")
+            time.sleep(0.5 * settings.lag_offset)
 
         if attempts >= source.ASA.config.console_ccc_attempts:
             logs.logger.error(f"CCC is still returning NONE after {attempts} attempts")
@@ -74,31 +95,19 @@ def console_ccc():
 
 def console_write(text:str):
     global last_command
-    attempts = 0
-    while not is_open():
-        attempts += 1
-        utils.press_key("ConsoleKeys")
-        template.template_await_true(is_open,1)
-        if attempts >= source.ASA.config.console_open_attempts:
-            logs.logger.error(f"console didnt open after {attempts} attempts unable to input {text}")
-            break
+    # Blindly press ConsoleKeys to open console
+    utils.press_key("ConsoleKeys")
+    time.sleep(0.3 * settings.lag_offset)
 
-    if is_open():
-        middle = template.console_strip_check(template.console_strip_middle())
-        enter_data(text)
-        close_console(middle)
-        last_command = text
-        time.sleep(0.1*settings.lag_offset) # slow to try and prevent opening clipboard to empty data
+    enter_data(text)
+    time.sleep(0.1*settings.lag_offset)
+    utils.press_key("Enter")
+    
+    last_command = text
+    time.sleep(0.1*settings.lag_offset)
 
 def close_console(middle):
     '''
-    middle bar console has to have been entered in 2 times 
-    before typing we check again for the console location just to make sure 
+    We no longer use this as we do blind execution
     '''
-    time.sleep(0.1*settings.lag_offset)
-    utils.press_key("Enter")
-
-    if middle == True:
-        logs.logger.warning(f"middle console open if this is happening alot something should be changed")
-        time.sleep(0.1*settings.lag_offset)
-        utils.press_key("Enter")
+    pass

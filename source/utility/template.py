@@ -303,7 +303,7 @@ def console_strip_bottom():
     if screen.screen_resolution == 1440:
         roi = screen.get_screen_roi(0,1419,2560,2)
     else:
-        roi = screen.get_screen_roi(0,1059,1920,2)
+        roi = screen.get_screen_roi(0,1058,1920,1)
     return roi
 
 def console_strip_middle():
@@ -313,15 +313,37 @@ def console_strip_middle():
         roi = screen.get_screen_roi(0,795,1920,2)
     return roi 
 
-def console_strip_check(roi):
+def console_strip_check(roi, is_bottom=True):
     gray_roi = cv2.cvtColor(roi, cv2.COLOR_BGR2GRAY)
-    gray_mask = (gray_roi >= lower_console_bound) & (gray_roi <= upper_console_bound)
-    num_gray_pixels = np.count_nonzero(gray_mask)
+    mean_val = np.mean(gray_roi)
+    std_val = np.std(gray_roi)
+    
+    # Grab a reference strip just above the console to check if we are just looking at a solid wall
+    if is_bottom:
+        if screen.screen_resolution == 1440:
+            ref_roi = screen.get_screen_roi(0,1410,2560,2)
+        else:
+            ref_roi = screen.get_screen_roi(0,1050,1920,1)
+    else:
+        if screen.screen_resolution == 1440:
+            ref_roi = screen.get_screen_roi(0,1055,2560,2)
+        else:
+            ref_roi = screen.get_screen_roi(0,785,1920,2)
+            
+    gray_ref = cv2.cvtColor(ref_roi, cv2.COLOR_BGR2GRAY)
+    ref_mean = np.mean(gray_ref)
+    
+    logs.logger.template(f"console mean {mean_val:.2f}, std {std_val:.2f}, ref_mean {ref_mean:.2f}")
+    
+    # A solid wall will have the exact same color just above the console bounds.
+    # The console bar will have a distinctly different color than the wall above it.
+    if abs(mean_val - ref_mean) < 5.0:
+        return False
 
-    total_pixels = gray_roi.size
-    percentage_gray = (num_gray_pixels / total_pixels) * 100
-    logs.logger.template(f"percentage gray {percentage_gray}")
-    return percentage_gray >= 80
+    if std_val > 15.0:
+        return False
+        
+    return lower_console_bound <= mean_val <= upper_console_bound
 
 def check_both_strips():
     roi1 = console_strip_bottom()

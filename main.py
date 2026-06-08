@@ -5,7 +5,7 @@ import os
 import subprocess
 import sys
 import threading
-from source.utility.colour_checks import console_output,output_oranage_tp_pixel
+
 SETTINGS_FILE = "json_files/settings.json"
 
 default_settings = {
@@ -203,8 +203,10 @@ class SettingsGUI:
         self.log_text.see("end")
 
     def check_colours(self):
+        from source.utility.colour_checks import console_output
         self.append_log(f"the average console colour was :{console_output.output_mean_colour()} go to console.json and set +and - 5 from this in the respected section IE upperbound = average+5\n")
-        #self.append_log(f"{output_oranage_tp_pixel.get_orange_pixel()} -> these colours should be put into xxxxxx location in xxxx file ")
+        # from source.utility.colour_checks import output_oranage_tp_pixel
+        # self.append_log(f"{output_oranage_tp_pixel.get_orange_pixel()} -> these colours should be put into xxxxxx location in xxxx file ")
 
 if __name__ == "__main__":
     root = tk.Tk()

@@ -32,14 +32,33 @@ def spawn_in(bed_name:str):
     if is_open():
         state = "death screen" if is_dead() else "fast travel screen"
         logs.logger.debug(f"char is in the {state}")
+        
+        # Wait for the death screen map zoom/fade animation to finish
+        if is_dead():
+            time.sleep(10.0 * settings.lag_offset)
+        else:
+            time.sleep(2.0 * settings.lag_offset)
+        
         search_bar_x = variables.get_pixel_loc("search_bar_bed_dead_x" if is_dead() else "search_bar_bed_alive_x")
         windows.click(search_bar_x, variables.get_pixel_loc("search_bar_bed_y")) #search bar y axis is the same for both death/alive 
         
+        time.sleep(0.5 * settings.lag_offset) # ensure search bar is focused
         utils.ctrl_a() #CTRL A removes all previous data in the search bar 
+        time.sleep(0.2 * settings.lag_offset)
         utils.write(bed_name)
 
-        time.sleep(0.2*settings.lag_offset)
-        windows.click(variables.get_pixel_loc("first_bed_slot_x"),variables.get_pixel_loc("first_bed_slot_y"))
+        # Wait extra time for the map UI to filter out other beds!
+        time.sleep(1.5 * settings.lag_offset)
+        
+        bed_slot_x = variables.get_pixel_loc("first_bed_slot_dead_x" if is_dead() else "first_bed_slot_x")
+        bed_slot_y = variables.get_pixel_loc("first_bed_slot_dead_y" if is_dead() else "first_bed_slot_y")
+        
+        windows.click(bed_slot_x, bed_slot_y)
+        time.sleep(0.5 * settings.lag_offset)
+        
+        # Click it a second time to ensure selection registers
+        windows.click(bed_slot_x, bed_slot_y)
+        time.sleep(0.2 * settings.lag_offset)
 
         if not template.template_await_true(template.check_teleporter_orange,3): # waiting for the bed to appear as ready to spawn in
             logs.logger.error(f"the bed char tried spawning on is not in the ready state or cant be found exiting out of bed screen now")

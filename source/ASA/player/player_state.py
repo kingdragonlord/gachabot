@@ -25,6 +25,8 @@ class charecter():
         self.tp = False
         self.on_bed = False
         self.on_tp = True # should be starting on a tp anyway
+        self.anchor_x = None
+        self.anchor_y = None
         
     def crouch(self):
         if not self.crouched:
@@ -46,6 +48,8 @@ class charecter():
     def is_on_tp(self):
         self.on_tp = True
         self.on_bed = False
+        self.anchor_x = None
+        self.anchor_y = None
 
 human = charecter()
 
@@ -67,11 +71,17 @@ def reset_state():
     tribelog.close()
     if bed.is_open():
        bed.spawn_in(settings.bed_spawn) #guessing the char died will respawn it if the char hasnt died and it just in a tekpod screen it will just exit when it cant find its target bed
+       human.is_on_tp() # Ensure the bot knows it is standing on the teleporter
     utils.press_key("Run") # makes the char stand up doing this at the end ensures we arent in any inventory
 
-def check_state(): # mainliy checked at the start of every task to check for food / water on the char
+def check_state(check_buffs_flag=True): # mainliy checked at the start of every task to check for food / water on the char
     check_disconnected()
     reset_state()
+    if not check_buffs_flag:
+        if source.gacha_bot.render.render_flag or template.check_buffs("tek_pod_buff", 0.7):
+            logs.logger.debug("detected in tekpod (via flag or buff icon), leaving tekpod instantly without opening inventory")
+            source.gacha_bot.render.leave_tekpod()
+        return
     buff = buffs.check_buffs()
     type = buff.check_buffs()
     if type == 1 or source.gacha_bot.render.render_flag: #type 1 is when char is in the tekpod
@@ -80,7 +90,9 @@ def check_state(): # mainliy checked at the start of every task to check for foo
     elif type == 2 or type == 3:
         logs.logger.warning(f"tping back to render bed to replenish food and water | 2= water 3= food | reason:{type}")
         teleporter.teleport_not_default(settings.bed_spawn)
-        source.gacha_bot.render.enter_tekpod()
+        from source.ASA.stations import custom_stations
+        render_metadata = custom_stations.get_station_metadata(settings.bed_spawn)
+        source.gacha_bot.render.enter_tekpod(render_metadata)
         time.sleep(30) # assuming 30 seconds should replenish the player back to 100/100
         source.gacha_bot.render.leave_tekpod()
         time.sleep(1)

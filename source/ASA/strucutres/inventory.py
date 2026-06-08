@@ -15,9 +15,35 @@ def is_open():
     
 def open():
     attempts = 0 
+    last_sweep_yaw = 0
+    last_sweep_pitch = 0
     while not is_open():
         attempts += 1
         logs.logger.debug(f"trying to open strucuture inventory {attempts} / {source.ASA.config.inventory_open_attempts}")
+        
+        sweep_yaw = 0
+        sweep_pitch = 0
+        if attempts == 2: sweep_yaw = 5
+        elif attempts == 3: sweep_yaw = -5
+        elif attempts == 4: sweep_yaw = 10
+        elif attempts == 5: sweep_yaw = -10
+        elif attempts == 6: sweep_pitch = 5
+        elif attempts == 7: sweep_pitch = -5
+        elif attempts == 8: sweep_yaw = 5; sweep_pitch = 5
+        elif attempts == 9: sweep_yaw = -5; sweep_pitch = 5
+        
+        delta_yaw = sweep_yaw - last_sweep_yaw
+        delta_pitch = sweep_pitch - last_sweep_pitch
+        
+        if delta_yaw > 0: utils.turn_right(delta_yaw)
+        elif delta_yaw < 0: utils.turn_left(-delta_yaw)
+        
+        if delta_pitch > 0: utils.turn_down(delta_pitch)
+        elif delta_pitch < 0: utils.turn_up(-delta_pitch)
+        
+        last_sweep_yaw = sweep_yaw
+        last_sweep_pitch = sweep_pitch
+        
         utils.press_key("AccessInventory")
         if template.template_await_true(template.check_template,2,"inventory",0.7):
             logs.logger.debug(f"inventory opened")

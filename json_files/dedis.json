@@ -4,106 +4,190 @@
         "active": true,
         "dediBoxes": [
             {
-                "resource": "element",
-                "location": {
-                    "yaw": 0,
-                    "pitch": 0
-                },
-                "crouched": false
+                "resource": "",
+                "crouched": false,
+                "yaw": 43.29,
+                "pitch": 20.31
             },
             {
-                "resource": "element",
-                "location": {
-                    "yaw": 0,
-                    "pitch": 0
-                },
-                "crouched": false
+                "resource": "",
+                "crouched": false,
+                "yaw": 93.48,
+                "pitch": 2.26
             },
             {
-                "resource": "flint",
-                "location": {
-                    "yaw": 0,
-                    "pitch": 0
-                },
-                "crouched": false
+                "resource": "",
+                "crouched": false,
+                "yaw": 92.24,
+                "pitch": -21.15
             },
             {
-                "resource": "flint",
-                "location": {
-                    "yaw": 0,
-                    "pitch": 0
-                },
-                "crouched": false
+                "resource": "",
+                "crouched": false,
+                "yaw": 43.74,
+                "pitch": -16.32
             },
             {
-                "resource": "fungal",
-                "location": {
-                    "yaw": 0,
-                    "pitch": 0
-                },
-                "crouched": true
+                "resource": "",
+                "crouched": true,
+                "yaw": 48.04,
+                "pitch": -16.39
             },
             {
-                "resource": "fungal",
-                "location": {
-                    "yaw": 0,
-                    "pitch": 0
-                },
-                "crouched": true
+                "resource": "",
+                "crouched": true,
+                "yaw": 93.43,
+                "pitch": -19.59
+            },
+            {
+                "resource": "",
+                "crouched": false,
+                "yaw": 135.33,
+                "pitch": 3.29
+            },
+            {
+                "resource": "",
+                "crouched": false,
+                "yaw": -171.44,
+                "pitch": 21.43
+            },
+            {
+                "resource": "",
+                "crouched": false,
+                "yaw": -165.7,
+                "pitch": -14.61
+            },
+            {
+                "resource": "",
+                "crouched": false,
+                "yaw": 133.19,
+                "pitch": -16.75
+            },
+            {
+                "resource": "",
+                "crouched": true,
+                "yaw": 136.19,
+                "pitch": -18.96
+            },
+            {
+                "resource": "",
+                "crouched": true,
+                "yaw": -164.24,
+                "pitch": -21.52
+            },
+            {
+                "resource": "",
+                "crouched": false,
+                "yaw": -119.24,
+                "pitch": 13.51
+            },
+            {
+                "resource": "",
+                "crouched": false,
+                "yaw": -73.04,
+                "pitch": 12.85
+            },
+            {
+                "resource": "",
+                "crouched": false,
+                "yaw": -71.72,
+                "pitch": -10.72
+            },
+            {
+                "resource": "",
+                "crouched": false,
+                "yaw": -122.62,
+                "pitch": -12.12
+            },
+            {
+                "resource": "",
+                "crouched": true,
+                "yaw": -121.92,
+                "pitch": -16.19
+            },
+            {
+                "resource": "",
+                "crouched": true,
+                "yaw": -70.84,
+                "pitch": -15.35
             }
         ]
     },
     {
         "dediID": "grindables",
-        "active": false,
+        "active": true,
         "dediBoxes": [
             {
-                "resource": "cementing",
-                "location": {
-                    "yaw": 0,
-                    "pitch": 0
-                },
-                "crouched": false
+                "resource": "",
+                "crouched": false,
+                "yaw": -32.34,
+                "pitch": 16.21
             },
             {
-                "resource": "hide",
-                "location": {
-                    "yaw": 0,
-                    "pitch": 0
-                },
-                "crouched": false
+                "resource": "",
+                "crouched": false,
+                "yaw": 17.17,
+                "pitch": 13.79
             },
             {
-                "resource": "metal",
-                "location": {
-                    "yaw": 0,
-                    "pitch": 0
-                },
-                "crouched": false
+                "resource": "",
+                "crouched": false,
+                "yaw": 17.84,
+                "pitch": -13.54
             },
             {
-                "resource": "electronics",
-                "location": {
-                    "yaw": 0,
-                    "pitch": 0
-                },
-                "crouched": false
+                "resource": "",
+                "crouched": false,
+                "yaw": -35.13,
+                "pitch": -16.47
             },
             {
-                "resource": "crystal",
-                "location": {
-                    "yaw": 0,
-                    "pitch": 0
-                },
-                "crouched": false
+                "resource": "",
+                "crouched": true,
+                "yaw": -32.5,
+                "pitch": -15.54
             },
             {
-                "resource": "wood",
-                "location": {
-                    "yaw": 0,
-                    "pitch": 0
-                },
-                "crouched": false
+                "resource": "",
+                "crouched": true,
+                "yaw": 18.22,
+                "pitch": -21.12
+            },
+            {
+                "resource": "",
+                "crouched": false,
+                "yaw": 130.59,
+                "pitch": 13.94
+            },
+            {
+                "resource": "",
+                "crouched": false,
+                "yaw": -176.41,
+                "pitch": 9.31
+            },
+            {
+                "resource": "",
+                "crouched": false,
+                "yaw": -178.87,
+                "pitch": -18.34
+            },
+            {
+                "resource": "",
+                "crouched": false,
+                "yaw": 133.6,
+                "pitch": -15.62
+            },
+            {
+                "resource": "",
+                "crouched": true,
+                "yaw": 134.18,
+                "pitch": -16.71
+            },
+            {
+                "resource": "",
+                "crouched": true,
+                "yaw": -178.1,
+                "pitch": -16.51
             }
         ]
     }

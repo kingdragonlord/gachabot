@@ -1,20 +1,12 @@
-import ASA.stations
-import ASA.stations.custom_stations
-import ASA.strucutres
-import ASA.strucutres.teleporter
-import template
-import logs.gachalogs as logs
-import utils
-import windows
-import variables
-import time 
-import settings
-import ASA.config 
-import ASA.strucutres.inventory
-import ASA.player.player_inventory
-import bot.config
+import time
 import json
-import screen 
+import settings
+from source.ASA.stations import custom_stations
+from source.ASA.strucutres import teleporter, inventory as struc_inventory
+from source.utility import template, utils, windows, variables, screen
+from source.logs import gachalogs as logs
+from source.ASA import config as asa_config
+from source.ASA.player import player_inventory 
 
 def craft():
     ...

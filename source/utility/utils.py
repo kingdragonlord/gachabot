@@ -83,7 +83,7 @@ FUNCTIONS FOR MOUSE MOVEMENT
 
 current_yaw = 0
 current_pitch = 0
-player_pitch_minimum = -80
+player_pitch_minimum = -89
 player_pitch_max = 87
 
 def normalize_yaw(yaw):
@@ -162,6 +162,7 @@ def zero():
 
     yaw_zero(ccc_data)
     pitch_zero(ccc_data)
+    return ccc_data
     
 def get_yaw_pitch():
     global current_pitch

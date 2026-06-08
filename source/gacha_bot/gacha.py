@@ -8,7 +8,32 @@ from source.ASA.player import player_inventory , player_state ,console
 import source.gacha_bot.config 
 import source.gacha_bot.structures.crop_plots as crop_plots
 
+def check_drift():
+    import math
+    from source.ASA.player import player_state
+    
+    ccc_data = utils.zero()
+    if ccc_data and len(ccc_data) >= 2:
+        try:
+            curr_x = float(ccc_data[0])
+            curr_y = float(ccc_data[1])
+            if player_state.human.anchor_x is None:
+                player_state.human.anchor_x = curr_x
+                player_state.human.anchor_y = curr_y
+                logs.logger.info(f"Anchored position at {curr_x}, {curr_y}")
+            else:
+                distance = math.sqrt((curr_x - player_state.human.anchor_x)**2 + (curr_y - player_state.human.anchor_y)**2)
+                if distance > 50:
+                    logs.logger.warning(f"DRIFT DETECTED! Moved {distance:.2f} units from anchor. Triggering realign.")
+                    return "DRIFT_DETECTED"
+        except Exception as e:
+            logs.logger.error(f"Error during drift detection: {e}")
+    return "OK"
+
 def drop_off(metadata): #drop off for 150 stacks of seeds
+    if check_drift() == "DRIFT_DETECTED":
+        return "DRIFT_DETECTED"
+
     direction = metadata.side
     if direction == "right":
         turn_constant = 1
@@ -101,7 +126,8 @@ def collection(metadata):
     target_pitch = getattr(metadata, "target_pitch", None)
     
     if target_yaw is not None and target_pitch is not None:
-        utils.turn_to(target_yaw, target_pitch)
+        utils.set_yaw(target_yaw)
+        utils.set_pitch(target_pitch)
     else:
         # Fallback to legacy blind turning
         direction = metadata.side
@@ -120,11 +146,15 @@ def collection(metadata):
 
 
 def drop_off_nocrop(metadata): # change reberry time or you will run out of crops
+    if check_drift() == "DRIFT_DETECTED":
+        return "DRIFT_DETECTED"
+        
     target_yaw = getattr(metadata, "target_yaw", None)
     target_pitch = getattr(metadata, "target_pitch", None)
     
     if target_yaw is not None and target_pitch is not None:
-        utils.turn_to(target_yaw, target_pitch)
+        utils.set_yaw(target_yaw)
+        utils.set_pitch(target_pitch)
     else:
         # Fallback to legacy blind turning
         direction = metadata.side
@@ -153,7 +183,8 @@ def iguanadon_gacha(metadata):
         # Turning backwards to face the iguanadon from the gacha
         # Wait, if we use absolute aiming, does this function aim at the Gacha or the Iguanodon?
         # The original code did turn_right(180) to face the iguanadon.
-        utils.turn_to((target_yaw + 180) % 360, target_pitch)
+        utils.set_yaw((target_yaw + 180) % 360)
+        utils.set_pitch(target_pitch)
     else:
         # Fallback to legacy blind turning
         direction = metadata.side
@@ -228,7 +259,8 @@ def y_trap_drop_off(metadata):
     target_pitch = getattr(metadata, "target_pitch", None)
     
     if target_yaw is not None and target_pitch is not None:
-        utils.turn_to(target_yaw, target_pitch)
+        utils.set_yaw(target_yaw)
+        utils.set_pitch(target_pitch)
     else:
         # Fallback to legacy blind turning
         direction = metadata.side

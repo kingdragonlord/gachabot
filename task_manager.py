@@ -117,11 +117,14 @@ class task_scheduler(metaclass=SingletonMeta):
             if task.name != self.prev_task_name:
                 logs.logger.info(f"Executing task: {task.name}")
             
+            from source.utility import windows
+            windows.focus_game()
+            
             try:
                 task.execute()  
             except Exception as e:
                 logs.logger.error(f"TASK FAILED: {task.name}. Error: {e}")
-                logs.logger.error("Attempting error recovery: teleporting back to bed and pausing.")
+                logs.logger.error("Attempting error recovery: teleporting back to bed.")
                 
                 from source.ASA.strucutres import teleporter
                 from source.gacha_bot import render
@@ -129,12 +132,14 @@ class task_scheduler(metaclass=SingletonMeta):
                 import time
                 try:
                     teleporter.teleport_not_default(settings.bed_spawn)
-                    render.enter_tekpod()
+                    from source.ASA.stations import custom_stations
+                    render_metadata = custom_stations.get_station_metadata(settings.bed_spawn)
+                    render.enter_tekpod(render_metadata)
                 except Exception as recovery_error:
                     logs.logger.error(f"Failed to recover to bed: {recovery_error}")
                 
-                logs.logger.error("Bot is paused due to error. Please resolve and restart.")
-                time.sleep(999999) # Pause indefinitely
+                logs.logger.warning(f"Re-queueing {task.name} to try again later.")
+                self.move_to_waiting_queue(task)
                 return
             
             self.prev_task_name = task.name
@@ -181,6 +186,7 @@ def main():
         scheduler.add_task(task)
 
     gacha_data = load_resolution_data("json_files/gacha.json")
+    pair_count = 0
     for entry_gacha in gacha_data:
         name = entry_gacha["name"]
         teleporter = entry_gacha["teleporter"]
@@ -192,6 +198,8 @@ def main():
         else:
             task = stations.gacha_station(name, teleporter, direction)
         scheduler.add_task(task)
+        if direction == "left":
+            pair_count += 1
         
     scheduler.add_task(stations.render_station())
     logs.logger.info("scheduler now running")
