@@ -16,10 +16,15 @@ def berry_collection():
     time.sleep(0.5)
 
 def berry_station():
+    # berry trough upper
+    utils.set_yaw(171.80)
+    utils.set_pitch(-2.03)
     berry_collection()
-    utils.turn_down(50)
+    
+    # berry trough lower
+    utils.set_yaw(174.93)
+    utils.set_pitch(-34.37)
     berry_collection()
-    utils.turn_up(50)
 
 def seed(type):
     if inventory.is_open():
@@ -68,16 +73,16 @@ def iguanadon_open(metadata):
     time.sleep(0.2*settings.lag_offset)
     
     # Must aim at Iguanodon BEFORE opening!
-    utils.zero()
-    utils.set_yaw(metadata.yaw)
+    utils.set_yaw(164.74)
+    utils.set_pitch(-0.96)
     time.sleep(0.2*settings.lag_offset)
     
     inventory.open()
     while not inventory.is_open():
         attempt += 1
         logs.logger.debug(f"the iguanadon at {metadata.name} could not be accessed retrying {attempt} / {source.gacha_bot.config.iguanadon_attempts}")
-        utils.zero()
-        utils.set_yaw(metadata.yaw)
+        utils.set_yaw(164.74)
+        utils.set_pitch(-0.96)
         time.sleep(0.2*settings.lag_offset)
         inventory.open()
         if attempt >= source.gacha_bot.config.iguanadon_attempts:

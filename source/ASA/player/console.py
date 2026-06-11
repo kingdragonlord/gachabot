@@ -10,7 +10,21 @@ import win32clipboard
 last_command = ""
 
 def is_open():
-    return template.console_strip_check(template.console_strip_bottom(), is_bottom=True) or template.console_strip_check(template.console_strip_middle(), is_bottom=False)
+    # Use the exact coordinates of the '>' symbol provided by the user
+    if screen.screen_resolution == 1080:
+        roi = screen.get_screen_roi(7, 1071, 1, 1)
+    else:
+        # Convert to 1440p and check a small 3x3 box to be safe
+        roi = screen.get_screen_roi(8, 1427, 3, 3) 
+        
+    for row in roi:
+        for pixel in row:
+            b, g, r = pixel[:3]
+            # The '>' symbol is bright. The background is dark.
+            if r > 150 and g > 150 and b > 150:
+                return True
+                
+    return False
 
 def enter_data(data:str):
     global last_command
@@ -41,9 +55,15 @@ def console_ccc():
         logs.logger.debug(f"trying to get ccc data {attempts} / {source.ASA.config.console_ccc_attempts}")
         player_state.reset_state() #reset state at the start to make sure we can open up the console window
         time.sleep(0.5 * settings.lag_offset) # wait for any UI closing animations to finish before pressing console key
-        # Blindly press ConsoleKeys to open console
+            
+        # Press ConsoleKeys to open console
         utils.press_key("ConsoleKeys")
         time.sleep(0.3 * settings.lag_offset) # wait for console to open visually
+        
+        # SAFETY GATE: Ensure console is actually open
+        if not is_open():
+            logs.logger.warning("Console did NOT open! Retrying.")
+            continue
         
         # CLEAR THE CLIPBOARD BEFORE DOING ANYTHING to prevent reading old data on failure
         try:
@@ -78,12 +98,7 @@ def console_ccc():
                 pass
         
         if data is None:
-            # If data is None, we failed to get CCC coordinates. 
-            # This almost always means the console wasn't open and we accidentally opened the chat instead.
-            # Press Escape to close the chat so we don't get stuck typing commands into it.
-            logs.logger.warning("Failed to get CCC data! Pressing Escape to clear chat box.")
-            utils.press_key("Escape")
-            time.sleep(0.5 * settings.lag_offset)
+            logs.logger.warning("Failed to get CCC data from clipboard after pasting. Retrying.")
 
         if attempts >= source.ASA.config.console_ccc_attempts:
             logs.logger.error(f"CCC is still returning NONE after {attempts} attempts")
@@ -95,16 +110,29 @@ def console_ccc():
 
 def console_write(text:str):
     global last_command
-    # Blindly press ConsoleKeys to open console
-    utils.press_key("ConsoleKeys")
-    time.sleep(0.3 * settings.lag_offset)
-
-    enter_data(text)
-    time.sleep(0.1*settings.lag_offset)
-    utils.press_key("Enter")
     
-    last_command = text
-    time.sleep(0.1*settings.lag_offset)
+    attempts = 0
+    while attempts < source.ASA.config.console_ccc_attempts:
+        attempts += 1
+            
+        # Press ConsoleKeys to open console
+        utils.press_key("ConsoleKeys")
+        time.sleep(0.3 * settings.lag_offset)
+        
+        # SAFETY GATE: Ensure console is actually open
+        if not is_open():
+            logs.logger.warning(f"Console did NOT open for console_write! Retrying.")
+            continue
+
+        enter_data(text)
+        time.sleep(0.1*settings.lag_offset)
+        utils.press_key("Enter")
+        
+        last_command = text
+        time.sleep(0.1*settings.lag_offset)
+        return
+        
+    logs.logger.error(f"Failed to open console to write '{text}' after {attempts} attempts")
 
 def close_console(middle):
     '''

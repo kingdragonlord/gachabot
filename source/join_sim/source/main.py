@@ -5,7 +5,14 @@ from source.join_sim.source.logs import logger as logs
 import source.join_sim.source.crash.crash as crash
 
 
-server = 0000
+import json
+
+try:
+    with open("json_files/settings.json", "r") as f:
+        settings_data = json.load(f)
+        server = settings_data.get("server_number", "0000")
+except Exception as e:
+    server = "0000"
 
 def is_menu():
     return recon_utils.check_template_no_bounds("escape",0.7) or recon_utils.check_template_no_bounds("escape_obscured",0.7)

@@ -28,8 +28,8 @@ server_number: str = data["server_number"]
 crafting: bool = data["crafting"]
 seeds_230: bool = data["seeds_230"]
 side_crop_plot: bool = data["side_crop_plot"]
-y_trap_bot: bool = data["y_trap_bot"]
-
+y_trap_bot: bool = data.get("y_trap_bot", False)
+y_trap_and_seed_bot: bool = data.get("y_trap_and_seed_bot", False)
 #YOUR discord channel IDs and bot API key. To find channel IDs enable developer mode in discord and right click the channel to copy ID.
 log_channel_gacha = data["log_channel_gacha"]
 log_active_queue = data["log_active_queue"]

@@ -4,9 +4,9 @@ import time
 from source.join_sim.source.logs import logger as logs
 
 buttons = {
-    "search_x": 2230, "search_y": 260,
-    "first_server_x": 2230, "first_server_y": 438,
-    "join_x": 2230, "join_y": 1260,
+    "search_x": 2149, "search_y": 261,
+    "first_server_x": 396, "first_server_y": 295,
+    "join_x": 2280, "join_y": 1256,
     "refresh_x": 1240, "refresh_y": 1250,
     "back_x": 230, "back_y": 1180,
     "cancel_x":1426,"cancel_y":970,

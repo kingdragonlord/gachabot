@@ -70,6 +70,30 @@ def transfer_all_inventory():
         windows.click(variables.get_pixel_loc("accept_drop_all_x"),variables.get_pixel_loc("accept_drop_all_y"))
         time.sleep(0.2*settings.lag_offset)
 
+def popcorn_inventory():
+    if is_open():
+        logs.logger.debug("popcorning remaining items in player inventory")
+        time.sleep(0.2*settings.lag_offset)
+        windows.click(variables.get_pixel_loc("search_inventory_x"),variables.get_pixel_loc("transfer_all_y")) 
+        utils.ctrl_a()  
+        time.sleep(0.2*settings.lag_offset)
+        utils.press_key("Backspace")
+        utils.press_key("Enter")
+        time.sleep(0.3*settings.lag_offset)
+        
+        # Shift X by 125 pixels to target the second slot instead of the un-droppable implant
+        second_slot_x = variables.get_pixel_loc("inv_slot_start_x") + 175
+        second_slot_y = variables.get_pixel_loc("inv_slot_start_y") + 70
+        windows.move_mouse(second_slot_x, second_slot_y)
+        time.sleep(0.2*settings.lag_offset)
+        
+        # Click the slot once to ensure the game has focus on it before we start spamming drop
+        windows.click(second_slot_x, second_slot_y)
+        time.sleep(0.2*settings.lag_offset)
+        
+        for _ in range(25):
+            utils.press_key("DropItem")
+            time.sleep(0.1*settings.lag_offset)
 
 
 def implant_eat():

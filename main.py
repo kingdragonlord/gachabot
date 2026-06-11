@@ -30,6 +30,7 @@ default_settings = {
     "seeds_230": False,
     "side_crop_plot":False,
     "y_trap_bot":False,
+    "y_trap_and_seed_bot":False,
     "log_channel_gacha": "",
     "log_active_queue": "",
     "log_wait_queue": "",

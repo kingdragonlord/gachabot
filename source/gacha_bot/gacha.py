@@ -8,6 +8,25 @@ from source.ASA.player import player_inventory , player_state ,console
 import source.gacha_bot.config 
 import source.gacha_bot.structures.crop_plots as crop_plots
 
+def clean_and_feed_gacha():
+    if inventory.is_open():
+        logs.logger.debug("Executing clean and feed sequence for Gacha")
+        inventory.transfer_all_from()
+        
+        player_inventory.search_in_inventory("trap")
+        time.sleep(0.2*settings.lag_offset)
+        player_inventory.transfer_all_inventory()
+        
+        player_inventory.search_in_inventory("seed")
+        time.sleep(0.2*settings.lag_offset)
+        player_inventory.transfer_all_inventory()
+        
+        player_inventory.search_in_inventory("pell")
+        time.sleep(0.2*settings.lag_offset)
+        player_inventory.transfer_all_inventory()
+        
+        player_inventory.popcorn_inventory()
+
 def check_drift():
     import math
     from source.ASA.player import player_state
@@ -100,22 +119,7 @@ def drop_off(metadata): #drop off for 150 stacks of seeds
         inventory.open()
         time.sleep(0.3*settings.lag_offset)
     if inventory.is_open():
-        player_inventory.search_in_inventory("seed")
-        time.sleep(0.2*settings.lag_offset)
-        player_inventory.transfer_all_inventory()
-        time.sleep(0.2*settings.lag_offset)
-        if settings.seeds_230:
-            inventory.search_in_object("pell")
-            time.sleep(0.2*settings.lag_offset)
-            inventory.drop_all_obj()
-            player_inventory.search_in_inventory("seed")
-            time.sleep(0.2*settings.lag_offset)
-            player_inventory.transfer_all_inventory()
-            time.sleep(0.2*settings.lag_offset)
-        player_inventory.search_in_inventory("pell")
-        time.sleep(0.2*settings.lag_offset)
-        player_inventory.transfer_all_inventory()
-        time.sleep(0.2*settings.lag_offset)
+        clean_and_feed_gacha()
 
     inventory.close()
     time.sleep(0.2*settings.lag_offset)
@@ -168,9 +172,7 @@ def drop_off_nocrop(metadata): # change reberry time or you will run out of crop
     inventory.open()
 
     if inventory.is_open():
-        inventory.transfer_all_from()
-        inventory.drop_all_obj()
-        player_inventory.transfer_all_inventory()
+        clean_and_feed_gacha()
     inventory.close()
     time.sleep(0.2*settings.lag_offset)
 
@@ -274,13 +276,7 @@ def y_trap_drop_off(metadata):
     inventory.open()
 
     if inventory.is_open():
-        player_inventory.search_in_inventory("y")
-        time.sleep(0.2*settings.lag_offset)
-        player_inventory.transfer_all_inventory()#put all y traps inside
-        time.sleep(0.2*settings.lag_offset)
-        player_inventory.search_in_inventory("pell")
-        time.sleep(0.2*settings.lag_offset)
-        player_inventory.transfer_all_inventory()#put all snow pelets inside
+        clean_and_feed_gacha()
         
     inventory.close()
     time.sleep(0.2*settings.lag_offset)

@@ -2,10 +2,10 @@
     "screen_resolution": "VALUE DOES NOT MATTER",
     "base_path": "VALUE DOES NOT MATTER",
     "lag_offset": 1.0,
-    "iguanadon": "GACHAIGUANADON",
+    "iguanadon": "gachabot_iguanadon",
     "drop_off": "gachabot_dedi01",
     "bed_spawn": "gachabot_render",
-    "berry_station": "GACHABERRYSTATION",
+    "berry_station": "gachabot_bt",
     "grindables": "gachabot_grindables01",
     "berry_type": "mejoberry",
     "station_yaw": 0.0,
@@ -20,8 +20,9 @@
     "seeds_230": false,
     "side_crop_plot": false,
     "y_trap_bot": true,
+    "y_trap_and_seed_bot": false,
     "log_channel_gacha": "1501973761069420574",
     "log_active_queue": "1359379562752114871",
     "log_wait_queue": "1359379599188033588",
-    "discord_api_key": ""
+    "discord_api_key": "[ENCRYPTION_KEY]"
 }

@@ -40,7 +40,7 @@ class gacha_station(base_task):
         self.name = name
         self.teleporter_name = teleporter_name # also the same as bed name for y
         self.direction = direction
-
+        self.cycle_count = 0
 
     def execute(self):
         player_state.check_state(False)
@@ -65,7 +65,15 @@ class gacha_station(base_task):
 
         berry_metadata = custom_stations.get_station_metadata(settings.berry_station)
         iguanadon_metadata = custom_stations.get_station_metadata(settings.iguanadon)
-        if settings.y_trap_bot:
+        
+        if settings.y_trap_and_seed_bot:
+            is_seed_round = (self.cycle_count % 3 == 0)
+            self.cycle_count += 1
+            do_y_trap = not is_seed_round
+        else:
+            do_y_trap = settings.y_trap_bot
+            
+        if do_y_trap:
             time.sleep(0.2)
             # Extract number from teleporter name to map to the correct ytrap station
             import re
